@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Osteopathie-Prüfung BAO</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1F6F6A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="BAO Prüfung">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -50,7 +56,11 @@ button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .score{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .score button{padding:8px 0;flex:1 1 52px;min-width:52px;text-align:center}
 .score button[aria-pressed="true"]{background:var(--teal-soft);border-color:var(--teal);font-weight:600}
-.bar{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:10px 0;margin-top:20px;display:flex;gap:10px;justify-content:space-between}
+.barwrap{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);margin-top:22px;padding-bottom:6px}
+.bar{padding:10px 0 0;display:flex;gap:10px;justify-content:space-between}
+.track{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:8px}
+#fort{height:100%;width:0;background:var(--teal);transition:width .12s linear}
+.swipe{font-size:.75rem;color:var(--muted);margin:6px 0 0;text-align:center}
 .grade{font-family:Newsreader,Georgia,serif;font-size:3rem;line-height:1;margin:0}
 .result{text-align:center;padding:22px 14px}
 .hist{font-size:.9rem;color:var(--muted);margin-top:24px}
@@ -298,6 +308,14 @@ function render(list, examMode, modus){
   stack.className = "stack";
   list.forEach((q,i) => stack.appendChild(card(q, i, examMode)));
   host.appendChild(stack);
+  const wrap = document.createElement("div");
+  wrap.className = "barwrap";
+  const track = document.createElement("div");
+  track.className = "track";
+  const fill = document.createElement("div");
+  fill.id = "fort";
+  track.appendChild(fill);
+  wrap.appendChild(track);
   const bar = document.createElement("div");
   bar.className = "bar";
   const left = document.createElement("button");
@@ -307,8 +325,14 @@ function render(list, examMode, modus){
   right.textContent = examMode ? "Auswerten" : "Fertig";
   right.onclick = examMode ? evaluate : home;
   bar.append(left, right);
-  host.appendChild(bar);
+  wrap.appendChild(bar);
+  host.appendChild(wrap);
+  const tipp = document.createElement("p");
+  tipp.className = "swipe";
+  tipp.textContent = "Nach rechts wischen bringt dich zurück";
+  host.appendChild(tipp);
   window.scrollTo(0,0);
+  setTimeout(fortschrittsbalken, 50);
 }
 
 function grade(p){
@@ -453,7 +477,31 @@ byId("startDrill").onclick = () => {
   const list = pool(byId("chapter").value).slice().sort((a,b) => a.nr - b.nr);
   render(list, false);
 };
+function fortschrittsbalken(){
+  const el = byId("fort");
+  if (!el || byId("exam").classList.contains("hide")) return;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const p = max > 40 ? Math.min(100, Math.round(window.scrollY / max * 100)) : 100;
+  el.style.width = p + "%";
+}
+window.addEventListener("scroll", fortschrittsbalken, {passive: true});
+window.addEventListener("resize", fortschrittsbalken);
+
+let tx = 0, ty = 0;
+document.addEventListener("touchstart", e => {
+  tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY;
+}, {passive: true});
+document.addEventListener("touchend", e => {
+  if (byId("exam").classList.contains("hide")) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (tx > 40 && dx > 90 && Math.abs(dy) < 60) home();
+}, {passive: true});
+
 startseite();
+
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
 </script>
 </body>
 </html>
