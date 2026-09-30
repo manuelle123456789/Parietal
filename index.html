@@ -77,6 +77,16 @@ select{font:inherit;padding:10px;border-radius:6px;border:1px solid var(--line);
 .note.klein{font-size:.8rem;margin:0 0 10px}
 .feldknopf{width:100%;text-align:left;padding:10px;font-size:.95rem;box-shadow:none;position:relative;padding-right:28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .feldknopf::after{content:"";position:absolute;right:12px;top:50%;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg)}
+.ausricht{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.ausricht > *{justify-self:start}
+@media (max-width:440px){.ausricht{display:flex;gap:10px;align-items:stretch;flex-wrap:nowrap}}
+.knopfschalter{display:inline-flex;align-items:center;gap:7px;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow);font-size:.8rem;line-height:1.15;cursor:pointer;user-select:none;white-space:nowrap;flex:none}
+.knopfschalter input{position:absolute;opacity:0;width:0;height:0}
+.kasten{flex:none;width:15px;height:15px;border:1.5px solid var(--line);border-radius:4px;background:var(--paper);position:relative}
+.knopfschalter input:checked ~ .kasten{background:var(--teal);border-color:var(--teal)}
+.knopfschalter input:checked ~ .kasten::after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+.knopfschalter:has(input:checked){border-color:var(--teal);background:var(--teal-soft);font-weight:600}
+.knopfschalter input:focus-visible ~ .kasten{outline:2px solid var(--teal);outline-offset:2px}
 .schalter{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:12px;border-top:1px solid var(--line);cursor:pointer;font-size:.92rem}
 .schalter input{position:absolute;opacity:0;width:0;height:0}
 .regler{flex:none;width:40px;height:24px;border-radius:12px;background:var(--line);position:relative;transition:background .15s}
@@ -156,7 +166,14 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
     <div class="card">
       <p class="q">Prüfung generieren</p>
       <p class="note" style="margin-top:-6px" id="pruefInfo"></p>
-      <div class="row" style="margin-top:12px"><button class="primary" id="startExam">Prüfung starten</button></div>
+      <div class="ausricht" style="margin-top:12px">
+        <button class="primary" id="startExam">Prüfung starten</button>
+        <label class="knopfschalter">
+          <input type="checkbox" id="nurNeu">
+          <span class="kasten" aria-hidden="true"></span>
+          <span>Neue Fragen zuerst</span>
+        </label>
+      </div>
     </div>
     <div class="zweier">
       <div class="card spalte">
@@ -242,12 +259,22 @@ function verfuegbar(liste){
   return rest.length ? rest : liste;
 }
 
+function kandidaten(liste){
+  if (!byId("nurNeu") || !byId("nurNeu").checked) return verfuegbar(liste);
+  const st = loadStats();
+  const neu = liste.filter(q => !(st[q.id] && st[q.id].n > 0));
+  if (neu.length) return neu;
+  const schwach = liste.filter(q => st[q.id] && st[q.id].letzte <= 50);
+  if (schwach.length) return schwach;
+  return liste;
+}
+
 function buildExam(){
   if (saeule === "viszeral"){
-    return SLOTS.viszeral.map(g => pick(verfuegbar(pool(g))));
+    return SLOTS.viszeral.map(g => pick(kandidaten(pool(g))));
   }
   if (saeule !== "parietal"){
-    const p = verfuegbar(alle()).slice();
+    const p = kandidaten(alle()).slice();
     for (let i = p.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [p[i],p[j]] = [p[j],p[i]]; }
     // höchstens eine Knochenfrage je Gruppe (16.x Hirnnerven, 17.x Blutgefäße)
     const gruppe = q => { const m = /^Cranio-(16|17)\./.exec(q.id); return m ? m[1] : null; };
@@ -265,8 +292,10 @@ function buildExam(){
   }
   const out = [], used = new Set();
   const take = s => {
-    const kand = verfuegbar(pool(s)).filter(q => !used.has(q.id));
-    const q = pick(kand.length ? kand : pool(s).filter(q => !used.has(q.id)));
+    const frei = kandidaten(pool(s)).filter(q => !used.has(q.id));
+    const ersatz = verfuegbar(pool(s)).filter(q => !used.has(q.id));
+    const uebrig = pool(s).filter(q => !used.has(q.id));
+    const q = pick(frei.length ? frei : ersatz.length ? ersatz : uebrig.length ? uebrig : pool(s));
     used.add(q.id); out.push(q);
   };
   ["Knie","Hüfte","Fuß"].forEach(take);
@@ -563,7 +592,7 @@ function buildEigen(){
   if (!gew.length) return [];
   const nur = byId("nurSchwach").checked;
   const st = loadStats();
-  const pools = gew.map(s => ({s, p: nur ? pool(s).filter(q => istSchwach(st, q)) : pool(s)})).filter(x => x.p.length);
+  const pools = gew.map(s => ({s, p: nur ? pool(s).filter(q => istSchwach(st, q)) : kandidaten(pool(s))})).filter(x => x.p.length);
   if (!pools.length) return [];
   const total = pools.reduce((a,x) => a + x.p.length, 0);
   const N = Math.min(10, total);
