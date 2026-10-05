@@ -112,9 +112,16 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 .warn{margin:8px 0 0;font-size:.78rem;font-weight:600;color:var(--flag)}
 .gesperrt{opacity:.55;cursor:default;border-left-color:var(--flag)}
 .warnbox{margin-top:12px;border:1px solid var(--flag);border-radius:6px;padding:8px 10px;font-size:.82rem;color:var(--flag)}
+.updatehinweis{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:50;max-width:696px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--teal);border-left:4px solid var(--teal);border-radius:8px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:.9rem}
+.updatehinweis.hide{display:none}
+.versioninfo{text-align:center;font-size:.75rem;color:var(--muted);margin-top:26px}
 </style>
 </head>
 <body>
+<div class="updatehinweis hide" id="updateHinweis" role="status">
+  <span>Neue Version verfügbar – dein Zwischenstand bleibt gespeichert.</span>
+  <button class="primary" id="updateJetzt">Aktualisieren</button>
+</div>
 <div class="wrap">
 <header>
   <h1 id="titel">Osteopathie-Prüfung BAO</h1>
@@ -138,6 +145,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
       <p class="warn">primär dysfunktional</p>
     </div>
   </div>
+  <p class="versioninfo" id="versionInfo"></p>
 </section>
 
 <section id="cranioWahl" class="hide">
@@ -828,6 +836,37 @@ document.addEventListener("touchend", e => {
 }, {passive: true});
 
 startseite();
+
+// ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
+const APP_VERSION = "2026-10-05.1";
+byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
+let neueVersion = null, letzteUpdatePruefung = 0;
+function aufNeueVersionWechseln(){
+  try { sessionStorage.setItem("bao_update_versuch", neueVersion); } catch(e) {}
+  location.replace(location.pathname + "?v=" + encodeURIComponent(neueVersion));
+}
+byId("updateJetzt").onclick = aufNeueVersionWechseln;
+async function updatePruefen(sofort){
+  if (!navigator.onLine) return;
+  if (!sofort && Date.now() - letzteUpdatePruefung < 2 * 60 * 1000) return;
+  letzteUpdatePruefung = Date.now();
+  try {
+    const r = await fetch("index.html", {cache: "no-store"});
+    if (!r.ok) return;
+    const m = (await r.text()).match(/const APP_VERSION = "([^"]+)"/);
+    if (!m || m[1] === APP_VERSION) return;
+    neueVersion = m[1];
+    let schonVersucht = null;
+    try { schonVersucht = sessionStorage.getItem("bao_update_versuch"); } catch(e) {}
+    const inPruefung = !byId("exam").classList.contains("hide");
+    if (!inPruefung && schonVersucht !== neueVersion) { aufNeueVersionWechseln(); return; }
+    byId("updateHinweis").classList.remove("hide");
+  } catch(e) {}
+}
+window.addEventListener("load", () => updatePruefen(true));
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") updatePruefen(false); });
+window.addEventListener("online", () => updatePruefen(false));
+setInterval(() => { if (document.visibilityState === "visible") updatePruefen(false); }, 15 * 60 * 1000);
 
 if ("serviceWorker" in navigator){
   window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
