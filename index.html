@@ -119,23 +119,26 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 .updatehinweis.hide{display:none}
 .versioninfo{text-align:center;font-size:.75rem;color:var(--muted);margin-top:26px}
 /* ---- Pathologie-Prüfung ---- */
-.pBlock{display:grid;gap:12px}
-.pKopf{font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
-.pGross{font-family:Newsreader,Georgia,serif;font-size:1.65rem;line-height:1.25;font-weight:500;color:var(--ink);margin:0}
-.pGross.pLeer{font-size:1.05rem;color:var(--muted);font-family:inherit;font-weight:400}
-.pSystem{font-size:.95rem;color:var(--muted);margin:-6px 0 0}
-.pGliederung{font-size:.95rem;line-height:1.6;color:var(--ink);background:var(--teal-soft);border-radius:6px;padding:10px 12px;margin:0}
-.pKnoepfe{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pKnoepfe .voll{grid-column:1 / -1}
-.pKnoepfe button{min-height:52px;font-size:1rem}
-.pStatus{font-size:.85rem;color:var(--muted);margin:0;min-height:1.2em}
-.pDiagListe{margin:0;padding-left:22px;font-size:1.05rem;line-height:1.5}
-.pDiagListe li{margin:4px 0}
-.pVerlauf{font-size:.8rem;color:var(--muted);border-top:1px dotted var(--line);padding-top:8px}
-.pVerlauf:empty{display:none}
-.pVerlaufTitel{font-weight:600;margin-bottom:2px}
-.pVerlaufZeile{padding:2px 0}
-.pTrenn{padding:2px 0;font-style:italic}
+.pKarte{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 20px;box-shadow:0 6px 20px rgba(22,33,43,.10);text-align:center;min-height:250px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.pHinweis{font-size:.8rem;font-weight:600;color:var(--amber);margin:0;min-height:0}
+.pHinweis:empty{display:none}
+.pLab{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+.pName{font-family:Newsreader,Georgia,serif;font-size:2rem;line-height:1.2;font-weight:500;color:var(--ink);margin:2px 0}
+.pName.pLeer{font-family:inherit;font-size:1.05rem;font-weight:400;color:var(--muted)}
+.pGliederung{font-size:.9rem;line-height:1.55;color:var(--muted);margin:0}
+.pDiagBereich{text-align:left;margin-top:8px;border-top:1px solid var(--line);padding-top:12px}
+.pDiagKnoepfe{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pDiagKnoepfe button{min-height:46px}
+.pDiagInfo{font-size:.85rem;color:var(--muted);margin:10px 0 0}
+.pDiagListe{margin:6px 0 0;padding-left:22px;font-size:1.02rem;line-height:1.5}
+.pDiagListe li{margin:3px 0}
+.pTrio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.pTrio button{min-height:64px;font-size:.9rem;line-height:1.2;padding:8px 4px}
+.pVerlaufBox{margin-top:20px}
+.pVerlaufTitel{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+#pVerlauf div{padding:7px 0;border-top:1px solid var(--line);font-size:.95rem}
+.pTyp{color:var(--muted);font-size:.8rem}
+.pTrenn{color:var(--muted);font-style:italic;font-size:.82rem!important}
 </style>
 </head>
 <body>
@@ -188,38 +191,29 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 </section>
 
 <section id="patho" class="hide">
-  <div class="stack">
-    <div class="card pBlock">
-      <p class="pKopf">Symptom</p>
-      <p class="pGross pLeer" id="pSymName">Noch kein Symptom gezogen</p>
-      <div class="pKnoepfe">
-        <button class="primary voll" id="pSymZiehen">Symptom ziehen</button>
-        <button id="pEineDiag" disabled>Eine Diagnose</button>
-        <button id="pAlleDiag" disabled>Alle Diagnosen</button>
-      </div>
-      <p class="pStatus" id="pDiagInfo"></p>
-      <ol class="pDiagListe" id="pDiagListe"></ol>
-      <p class="pStatus" id="pSymStatus"></p>
-      <div class="pVerlauf" id="pSymVerlauf"></div>
-    </div>
-    <div class="card pBlock">
-      <p class="pKopf">Krankheitsbild</p>
-      <p class="pGross pLeer" id="pKbName">Noch kein Krankheitsbild gezogen</p>
-      <p class="pSystem" id="pKbSystem"></p>
+  <div style="margin-top:18px">
+    <div class="pKarte">
+      <p class="pHinweis" id="pHinweis"></p>
+      <p class="pLab" id="pLab"></p>
+      <p class="pName pLeer" id="pName"></p>
       <p class="pGliederung hide" id="pGliederung"></p>
-      <div class="pKnoepfe"><button class="primary voll" id="pKbZiehen">Krankheitsbild ziehen</button></div>
-      <p class="pStatus" id="pKbStatus"></p>
-      <div class="pVerlauf" id="pKbVerlauf"></div>
+      <div class="pDiagBereich hide" id="pDiagBereich">
+        <div class="pDiagKnoepfe"><button id="pEineDiag">DD ziehen</button><button id="pAlleDiag">Alle DDs</button></div>
+        <p class="pDiagInfo" id="pDiagInfo"></p>
+        <ol class="pDiagListe" id="pDiagListe"></ol>
+      </div>
     </div>
-    <div class="card pBlock">
-      <p class="pKopf">Bild beschreiben</p>
-      <p class="pGross pLeer" id="pBildName">Noch kein Bild gezogen</p>
-      <div class="pKnoepfe"><button class="primary voll" id="pBildZiehen">Bild beschreiben</button></div>
-      <p class="pStatus" id="pBildStatus"></p>
-      <div class="pVerlauf" id="pBildVerlauf"></div>
+    <div class="pTrio">
+      <button class="primary" id="pSymZiehen">Symptom<br>ziehen</button>
+      <button class="primary" id="pKbZiehen">Krankheitsbild<br>ziehen</button>
+      <button class="primary" id="pBildZiehen">Bild<br>beschreiben</button>
+    </div>
+    <div class="pVerlaufBox hide" id="pVerlaufBox">
+      <p class="pVerlaufTitel">Verlauf</p>
+      <div id="pVerlauf"></div>
     </div>
   </div>
-  <div class="row" style="margin-top:22px;justify-content:space-between"><button id="pZurueck">Zurück</button><button id="pReset">Zurücksetzen</button></div>
+  <div class="row" style="margin-top:22px;justify-content:space-between"><button id="pZurueck">Zurück</button><button id="pReset">↺ Zurücksetzen</button></div>
 </section>
 
 <section id="home" class="hide">
@@ -901,7 +895,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-10-10.6";
+const APP_VERSION = "2026-10-10.11";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
@@ -1480,116 +1474,96 @@ const PATHO_GLIEDERUNG = [
 (function(){
   const $ = id => document.getElementById(id);
   const mischen = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]] = [b[j],b[i]]; } return b; };
-
-  function neuerPool(name, quelle, verlaufId, statusId){
-    return { name, quelle, verlaufId, statusId, rest: mischen(quelle), verlauf: [], gezogen: 0 };
-  }
   const pools = {
-    sym:  neuerPool("sym",  PATHO_SYMPTOME, "pSymVerlauf", "pSymStatus"),
-    kb:   neuerPool("kb",   PATHO_KB,       "pKbVerlauf",  "pKbStatus"),
-    bild: neuerPool("bild", PATHO_BILDER,   "pBildVerlauf","pBildStatus")
+    sym:  { typ: "Symptom",        quelle: PATHO_SYMPTOME },
+    kb:   { typ: "Krankheitsbild", quelle: PATHO_KB },
+    bild: { typ: "Bild",           quelle: PATHO_BILDER }
   };
+  let verlauf = [];
+  let aktSymptom = null, diagRest = [], diagGezeigt = [];
 
-  function verlaufZeigen(p){
-    const el = $(p.verlaufId);
-    const zeilen = p.verlauf.slice(0, 5);
+  function ziehen(p){
+    let neu = false;
+    if (!p.rest.length){
+      p.rest = mischen(p.quelle); p.gezogen = 0; neu = true;
+      verlauf.unshift({trenn: true, text: "— neue Runde " + p.typ + " —"});
+    }
+    p.gezogen++;
+    return {e: p.rest.pop(), neu};
+  }
+  function verlaufZeigen(){
+    const el = $("pVerlauf");
     el.innerHTML = "";
-    if (!zeilen.length) return;
-    const titel = document.createElement("div");
-    titel.className = "pVerlaufTitel";
-    titel.textContent = "Zuletzt gezogen";
-    el.appendChild(titel);
-    zeilen.forEach(z => {
+    const z = verlauf.slice(0, 8);
+    if (!z.length){ $("pVerlaufBox").classList.add("hide"); return; }
+    $("pVerlaufBox").classList.remove("hide");
+    z.forEach(v => {
       const d = document.createElement("div");
-      d.className = z.trenn ? "pTrenn" : "pVerlaufZeile";
-      d.textContent = z.text;
+      if (v.trenn){ d.className = "pTrenn"; d.textContent = v.text; }
+      else { d.textContent = v.text; const s = document.createElement("span"); s.className = "pTyp"; s.textContent = " · " + v.typ; d.appendChild(s); }
       el.appendChild(d);
     });
   }
-
-  function ziehen(p, label){
-    let hinweis = "";
-    if (!p.rest.length){
-      p.rest = mischen(p.quelle);
-      p.gezogen = 0;
-      p.verlauf.unshift({trenn: true, text: "— neue Runde —"});
-      hinweis = "Runde beendet — neue Runde. ";
-    }
-    const e = p.rest.pop();
-    p.gezogen++;
-    p.verlauf.unshift({text: label(e)});
-    verlaufZeigen(p);
-    $(p.statusId).textContent = hinweis + p.gezogen + " von " + p.quelle.length + " in dieser Runde";
-    return e;
+  function karte(lab, name, rundeNeu){
+    $("pHinweis").textContent = rundeNeu ? "Runde beendet — neue Runde" : "";
+    $("pLab").textContent = lab;
+    $("pName").textContent = name;
+    $("pName").classList.remove("pLeer");
+    $("pGliederung").classList.add("hide");
+    $("pDiagBereich").classList.add("hide");
   }
 
-  // Symptom + Diagnosen
-  let aktSymptom = null, diagRest = [], diagGezeigt = [];
-  function diagListe(){
-    const ul = $("pDiagListe");
-    ul.innerHTML = "";
+  function diagZeigen(){
+    const ul = $("pDiagListe"); ul.innerHTML = "";
     diagGezeigt.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    $("pEineDiag").disabled = !diagRest.length;
+    $("pAlleDiag").disabled = !diagRest.length;
+    $("pDiagInfo").textContent = !diagGezeigt.length ? aktSymptom.diagnosen.length + " DDs hinterlegt"
+      : (diagRest.length ? diagGezeigt.length + " von " + aktSymptom.diagnosen.length + " DDs genannt" : "Alle DDs genannt");
   }
-  function diagKnoepfe(){
-    $("pEineDiag").disabled = !aktSymptom || !diagRest.length;
-    $("pAlleDiag").disabled = !aktSymptom || diagGezeigt.length === (aktSymptom ? aktSymptom.diagnosen.length : 0);
-  }
+
   $("pSymZiehen").onclick = () => {
-    aktSymptom = ziehen(pools.sym, e => e.symptom);
-    $("pSymName").textContent = aktSymptom.symptom;
-    $("pSymName").classList.remove("pLeer");
-    diagRest = mischen(aktSymptom.diagnosen);
-    diagGezeigt = [];
-    $("pDiagInfo").textContent = aktSymptom.diagnosen.length + " Diagnosen hinterlegt";
-    diagListe(); diagKnoepfe();
-  };
-  $("pEineDiag").onclick = () => {
-    if (!aktSymptom) return;
-    if (!diagRest.length){ $("pDiagInfo").textContent = "Alle Diagnosen genannt"; diagKnoepfe(); return; }
-    diagGezeigt.push(diagRest.pop());
-    diagListe();
-    $("pDiagInfo").textContent = diagRest.length ? diagGezeigt.length + " von " + aktSymptom.diagnosen.length + " genannt" : "Alle Diagnosen genannt";
-    diagKnoepfe();
-  };
-  $("pAlleDiag").onclick = () => {
-    if (!aktSymptom) return;
-    diagGezeigt = aktSymptom.diagnosen.slice();
-    diagRest = [];
-    diagListe();
-    $("pDiagInfo").textContent = "Alle Diagnosen genannt";
-    diagKnoepfe();
-  };
-
-  // Krankheitsbild
-  $("pKbZiehen").onclick = () => {
-    const e = ziehen(pools.kb, x => x.name);
-    $("pKbName").textContent = e.name;
-    $("pKbName").classList.remove("pLeer");
-    $("pKbSystem").textContent = e.system;
-    $("pGliederung").textContent = PATHO_GLIEDERUNG.join(" · ");
+    const p = pools.sym, r = ziehen(p);
+    aktSymptom = r.e; diagRest = mischen(aktSymptom.diagnosen); diagGezeigt = [];
+    verlauf.unshift({text: aktSymptom.symptom, typ: p.typ});
+    karte("Symptom · " + p.gezogen + "/" + p.quelle.length, aktSymptom.symptom, r.neu);
+    $("pGliederung").textContent = "Definition\nWarum tritt dieses Symptom auf?\nWelche Systeme können betroffen sein?\nBeschreibe den Pathomechanismus!";
+    $("pGliederung").style.whiteSpace = "pre-line";
     $("pGliederung").classList.remove("hide");
+    $("pDiagBereich").classList.remove("hide");
+    diagZeigen(); verlaufZeigen();
   };
+  $("pEineDiag").onclick = () => { if (!aktSymptom || !diagRest.length) return; diagGezeigt.push(diagRest.pop()); diagZeigen(); };
+  $("pAlleDiag").onclick = () => { if (!aktSymptom) return; diagGezeigt = aktSymptom.diagnosen.slice(); diagRest = []; diagZeigen(); };
 
-  // Bild beschreiben
+  $("pKbZiehen").onclick = () => {
+    const p = pools.kb, r = ziehen(p);
+    aktSymptom = null;
+    verlauf.unshift({text: r.e.name, typ: p.typ});
+    karte("Krankheitsbild · " + r.e.system + " · " + p.gezogen + "/" + p.quelle.length, r.e.name, r.neu);
+    $("pGliederung").textContent = PATHO_GLIEDERUNG.join(" · ");
+    $("pGliederung").style.whiteSpace = "";
+    $("pGliederung").classList.remove("hide");
+    verlaufZeigen();
+  };
   $("pBildZiehen").onclick = () => {
-    const e = ziehen(pools.bild, x => x);
-    $("pBildName").textContent = e;
-    $("pBildName").classList.remove("pLeer");
+    const p = pools.bild, r = ziehen(p);
+    aktSymptom = null;
+    verlauf.unshift({text: r.e, typ: p.typ});
+    karte("Bild beschreiben · " + p.gezogen + "/" + p.quelle.length, r.e, r.neu);
+    verlaufZeigen();
   };
 
   function allesZuruecksetzen(){
-    Object.keys(pools).forEach(k => {
-      const p = pools[k];
-      p.rest = mischen(p.quelle); p.gezogen = 0; p.verlauf = [];
-      verlaufZeigen(p);
-      $(p.statusId).textContent = "";
-    });
-    aktSymptom = null; diagRest = []; diagGezeigt = [];
-    $("pSymName").textContent = "Noch kein Symptom gezogen"; $("pSymName").classList.add("pLeer");
-    $("pDiagInfo").textContent = ""; diagListe(); diagKnoepfe();
-    $("pKbName").textContent = "Noch kein Krankheitsbild gezogen"; $("pKbName").classList.add("pLeer");
-    $("pKbSystem").textContent = ""; $("pGliederung").classList.add("hide");
-    $("pBildName").textContent = "Noch kein Bild gezogen"; $("pBildName").classList.add("pLeer");
+    Object.values(pools).forEach(p => { p.rest = mischen(p.quelle); p.gezogen = 0; });
+    verlauf = []; aktSymptom = null; diagRest = []; diagGezeigt = [];
+    $("pHinweis").textContent = "";
+    $("pLab").textContent = "Pathologie-Prüfung";
+    $("pName").textContent = "Ziehe ein Symptom, ein Krankheitsbild oder ein Bild";
+    $("pName").classList.add("pLeer");
+    $("pGliederung").classList.add("hide");
+    $("pDiagBereich").classList.add("hide");
+    verlaufZeigen();
   }
   $("pReset").onclick = allesZuruecksetzen;
 
