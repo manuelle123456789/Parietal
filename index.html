@@ -118,6 +118,24 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 .updatehinweis{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:50;max-width:696px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--teal);border-left:4px solid var(--teal);border-radius:8px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:.9rem}
 .updatehinweis.hide{display:none}
 .versioninfo{text-align:center;font-size:.75rem;color:var(--muted);margin-top:26px}
+/* ---- Pathologie-Prüfung ---- */
+.pBlock{display:grid;gap:12px}
+.pKopf{font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+.pGross{font-family:Newsreader,Georgia,serif;font-size:1.65rem;line-height:1.25;font-weight:500;color:var(--ink);margin:0}
+.pGross.pLeer{font-size:1.05rem;color:var(--muted);font-family:inherit;font-weight:400}
+.pSystem{font-size:.95rem;color:var(--muted);margin:-6px 0 0}
+.pGliederung{font-size:.95rem;line-height:1.6;color:var(--ink);background:var(--teal-soft);border-radius:6px;padding:10px 12px;margin:0}
+.pKnoepfe{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pKnoepfe .voll{grid-column:1 / -1}
+.pKnoepfe button{min-height:52px;font-size:1rem}
+.pStatus{font-size:.85rem;color:var(--muted);margin:0;min-height:1.2em}
+.pDiagListe{margin:0;padding-left:22px;font-size:1.05rem;line-height:1.5}
+.pDiagListe li{margin:4px 0}
+.pVerlauf{font-size:.8rem;color:var(--muted);border-top:1px dotted var(--line);padding-top:8px}
+.pVerlauf:empty{display:none}
+.pVerlaufTitel{font-weight:600;margin-bottom:2px}
+.pVerlaufZeile{padding:2px 0}
+.pTrenn{padding:2px 0;font-style:italic}
 </style>
 </head>
 <body>
@@ -147,6 +165,10 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
       <p class="note" style="margin-top:0">BAO-Prüfung mit 10 Fragen + spezifisch Organe</p>
       <p class="warn">primär dysfunktional</p>
     </div>
+    <div class="card big" id="waehlePatho" style="margin-top:18px">
+      <p class="q" style="margin-bottom:4px">Pathologie</p>
+      <p class="note" style="margin-top:0">Patho-Prüfung – Symptom, Krankheitsbild und Bild per Zufall ziehen</p>
+    </div>
   </div>
   <p class="versioninfo" id="versionInfo"></p>
 </section>
@@ -163,6 +185,41 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
     </div>
   </div>
   <div class="row" style="margin-top:22px"><button id="zurueckStart">Zurück</button></div>
+</section>
+
+<section id="patho" class="hide">
+  <div class="stack">
+    <div class="card pBlock">
+      <p class="pKopf">Symptom</p>
+      <p class="pGross pLeer" id="pSymName">Noch kein Symptom gezogen</p>
+      <div class="pKnoepfe">
+        <button class="primary voll" id="pSymZiehen">Symptom ziehen</button>
+        <button id="pEineDiag" disabled>Eine Diagnose</button>
+        <button id="pAlleDiag" disabled>Alle Diagnosen</button>
+      </div>
+      <p class="pStatus" id="pDiagInfo"></p>
+      <ol class="pDiagListe" id="pDiagListe"></ol>
+      <p class="pStatus" id="pSymStatus"></p>
+      <div class="pVerlauf" id="pSymVerlauf"></div>
+    </div>
+    <div class="card pBlock">
+      <p class="pKopf">Krankheitsbild</p>
+      <p class="pGross pLeer" id="pKbName">Noch kein Krankheitsbild gezogen</p>
+      <p class="pSystem" id="pKbSystem"></p>
+      <p class="pGliederung hide" id="pGliederung"></p>
+      <div class="pKnoepfe"><button class="primary voll" id="pKbZiehen">Krankheitsbild ziehen</button></div>
+      <p class="pStatus" id="pKbStatus"></p>
+      <div class="pVerlauf" id="pKbVerlauf"></div>
+    </div>
+    <div class="card pBlock">
+      <p class="pKopf">Bild beschreiben</p>
+      <p class="pGross pLeer" id="pBildName">Noch kein Bild gezogen</p>
+      <div class="pKnoepfe"><button class="primary voll" id="pBildZiehen">Bild beschreiben</button></div>
+      <p class="pStatus" id="pBildStatus"></p>
+      <div class="pVerlauf" id="pBildVerlauf"></div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:22px;justify-content:space-between"><button id="pZurueck">Zurück</button><button id="pReset">Zurücksetzen</button></div>
 </section>
 
 <section id="home" class="hide">
@@ -844,7 +901,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-10-09.7";
+const APP_VERSION = "2026-10-10.4";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
@@ -877,6 +934,677 @@ setInterval(() => { if (document.visibilityState === "visible") updatePruefen(fa
 if ("serviceWorker" in navigator){
   window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
 }
+</script>
+<script>
+/* Pathologie-Prüfung — Daten unverändert übernommen */
+// Die 28 Prüfungssymptome mit den zugehörigen Differentialdiagnosen.
+const PATHO_SYMPTOME = [
+  { nr: 1, symptom: "Schmerzen eines größeren Gelenks (z. B. Schultergelenk)",
+    diagnosen: [
+      "Bakterielle (eitrige) Arthritis",
+      "Rheumatisches Fieber",
+      "Reaktive Arthritis / Reiter-Syndrom",
+      "Lyme-Borreliose",
+      "Arthrosis deformans",
+      "M. Bechterew",
+      "Rheumatoide Arthritis",
+      "Arthritis psoriatica",
+      "Traumatische Genese",
+      "Sarkoidose / Löfgren-Syndrom",
+      "M. Crohn / Colitis ulcerosa",
+    ] },
+  { nr: 2, symptom: "Schmerzen in einem Bein",
+    diagnosen: [
+      "Akuter Arterienverschluss",
+      "pAVK",
+      "Phlebothrombose",
+      "Oberflächliche chronisch-venöse Insuffizienz (Varikosis)",
+      "Periphere Nervenläsion",
+      "Polyneuropathie",
+      "Restless-Legs-Syndrom",
+    ] },
+  { nr: 3, symptom: "(Lumbale) Rückenschmerzen",
+    diagnosen: [
+      "M. Bechterew",
+      "Osteoporose",
+      "Sekundäre Knochentumore (Wirbelsäulenmetastasen)",
+      "Plasmozytom",
+      "Osteomyelitis / entzündlicher Wirbelsäulenprozess",
+      "Pyelonephritis",
+      "Nierensteine",
+      "Urothelkarzinom",
+      "Glomerulonephritis",
+      "Myelitis",
+      "Akute Pankreatitis",
+      "Chronische Pankreatitis",
+      "Pankreas-Ca",
+      "Ösophagus-Ca",
+      "Arterielle Hypertonie",
+    ] },
+  { nr: 4, symptom: "Thoraxschmerzen",
+    diagnosen: [
+      "Angina pectoris",
+      "Herzinfarkt",
+      "Perikarditis",
+      "Aortenklappenstenose",
+      "Rheumatisches Fieber",
+      "Lungenembolie",
+      "Pneumonie",
+      "Bronchialkarzinom",
+      "Tuberkulose / Pleuritis tuberculosa",
+      "Refluxösophagitis",
+      "Ösophagitis",
+      "Ösophagus-Ca",
+      "Akute Pankreatitis",
+      "Pneumothorax",  // ergänzt, nicht aus der Referenz
+      "Rippenserienfraktur",  // ergänzt, nicht aus der Referenz
+    ] },
+  { nr: 5, symptom: "Synkope",
+    diagnosen: [
+      "Aortenklappenstenose",
+      "Tachykarde Herzrhythmusstörungen",
+      "Bradykarde Herzrhythmusstörungen",
+      "Arterielle Hypertonie",
+      "Hypotonie / hypotone Kreislaufdysregulation",
+      "Herzinsuffizienz",
+      "Schock",
+      "Lungenembolie",
+      "Cor pulmonale / pulmonale Hypertonie",
+      "Anfallskrankheiten (Grand mal)",
+      "Zerebrovaskuläre Insuffizienz / TIA",
+      "Hypoglykämischer Schock",
+      "Coma diabeticum",
+    ] },
+  { nr: 6, symptom: "Einseitige Ödeme",
+    diagnosen: [
+      "Phlebothrombose",
+      "Oberflächliche chronisch-venöse Insuffizienz (Varikosis)",
+      "Urothelkarzinom",
+      "Bronchialkarzinom / Pancoast-Tumor",
+    ] },
+  { nr: 7, symptom: "Beidseitige Ödeme",
+    diagnosen: [
+      "Rechtsherzinsuffizienz",
+      "Globalinsuffizienz",
+      "Trikuspidalinsuffizienz/-stenose",
+      "Mitralstenose / Mitralinsuffizienz",
+      "Konstriktive Perikarditis",
+      "Glomerulonephritis",
+      "Chronische Niereninsuffizienz / akutes Nierenversagen",
+      "Cor pulmonale / pulmonale Hypertonie",
+      "Leberzirrhose",
+      "Lebermetastasen",
+      "Hypothyreose",
+      "Hyperkortisolismus (M. Cushing)",
+    ] },
+  { nr: 8, symptom: "Generalisierte Ödeme (Anasarka)",
+    diagnosen: [
+      "Globalinsuffizienz",
+      "Glomerulonephritis",
+      "Chronische Niereninsuffizienz",
+      "Cor pulmonale / pulmonale Hypertonie",
+      "Leberzirrhose (mit portaler Hypertension)",
+      "Hypothyreose",
+    ] },
+  { nr: 9, symptom: "Zyanose",
+    diagnosen: [
+      "Lungenödem (alveoläres Stadium)",
+      "Lungenemphysem, Typ „Blue Bloater“",
+      "Chronische (obstruktive) Bronchitis",
+      "Asthma bronchiale",
+      "Cor pulmonale / pulmonale Hypertonie",
+      "Linksherzinsuffizienz",
+      "Mitralstenose",
+      "Pulmonalklappenstenose",
+      "Mitralinsuffizienz",
+      "Schock",
+    ] },
+  { nr: 10, symptom: "Dyspnoe",
+    diagnosen: [
+      "Asthma bronchiale",
+      "Chronisch obstruktive Bronchitis / Lungenemphysem",
+      "Lungenödem",
+      "Lungenembolie",
+      "Pneumonie",
+      "Sarkoidose",
+      "Cor pulmonale / pulmonale Hypertonie",
+      "Bronchialkarzinom",
+      "Herzinsuffizienz / Linksherzinsuffizienz",
+      "Herzinfarkt",
+      "Aortenklappenstenose, Mitralstenose, Mitralinsuffizienz",
+      "Pulmonal- und Trikuspidalvitien",
+      "Schock, anaphylaktisch",
+      "Glomerulonephritis",
+      "Akutes / chronisches Nierenversagen",
+      "Pneumothorax",  // ergänzt, nicht aus der Referenz
+    ] },
+  { nr: 11, symptom: "Husten",
+    diagnosen: [
+      "Chronische (obstruktive) Bronchitis",
+      "Asthma bronchiale",
+      "Lungenemphysem",
+      "Pneumonie",
+      "Tuberkulose",
+      "Bronchiektasen",
+      "Bronchialkarzinom",
+      "Linksherzinsuffizienz",
+      "Mitralstenose",
+      "Mitralinsuffizienz",
+      "Antibasalmembran-Glomerulonephritis (Goodpasture-Syndrom)",
+    ] },
+  { nr: 12, symptom: "Blut im Stuhl",
+    diagnosen: [
+      "Kolorektales Karzinom",
+      "Colitis ulcerosa",
+      "Divertikulose / Divertikulitis",
+      "M. Crohn",
+      "Akute (erosive) Gastritis",
+      "Magen-Ca",
+      "Kolonpolypen (Adenome)",
+      "Mesenterialinfarkt",
+    ] },
+  { nr: 13, symptom: "Durchfall (Diarrhö)",
+    diagnosen: [
+      "Colitis ulcerosa",
+      "M. Crohn",
+      "Chronische Pankreatitis",
+      "Divertikulitis",
+      "Kolorektales Karzinom",
+      "Mesenterialinfarkt",
+      "Chronische Gastritis Typ A",
+      "Hyperthyreose",
+      "Diabetes mellitus – autonome Neuropathie",
+      "Polyneuropathie",
+      "Chronische Leukämie",
+    ] },
+  { nr: 14, symptom: "Obstipation",
+    diagnosen: [
+      "Hypothyreose",
+      "Diabetes mellitus – autonome Neuropathie",
+      "Hyperaldosteronismus (M. Conn)",
+      "Mechanischer Ileus",
+      "Paralytischer Ileus",
+      "Divertikulitis",
+      "Kolorektales Karzinom",
+      "Chronische Gastritis Typ A",
+      "M. Parkinson",
+      "Polyneuropathie",
+    ] },
+  { nr: 15, symptom: "Übelkeit / Erbrechen",
+    diagnosen: [
+      "Akute Gastritis",
+      "Gastroduodenale Ulkuskrankheit",
+      "Appendizitis",
+      "Ileus",
+      "Akute Pankreatitis",
+      "Magen-Ca / Pankreas-Ca",
+      "Cholezystitis / Gallensteine",
+      "Virushepatitis / Leberzirrhose",
+      "Refluxösophagitis",
+      "Divertikulitis / Mesenterialinfarkt",
+      "Migräne",
+      "Bakterielle / lymphozytäre Meningitis",
+      "Enzephalitis",
+      "Schädel-Hirn-Trauma / Commotio cerebri",
+      "Zerebrovaskuläre Insuffizienz / Hirnstamminfarkt",
+      "Herzinfarkt",
+      "Hypotonie / hypotone Kreislaufdysregulation",
+      "Schock",
+      "Arterielle Hypertonie",
+      "Coma diabeticum",
+      "Hyperthyreose (thyreotoxische Krise)",
+      "Chronische Niereninsuffizienz / Urämie",
+      "Akutes Nierenversagen",
+      "Pyelonephritis",
+    ] },
+  { nr: 16, symptom: "Epigastrale Schmerzen (Oberbauch mittig)",
+    diagnosen: [
+      "Akute Pankreatitis",
+      "Gastroduodenale Ulkuskrankheit",
+      "Akute Gastritis",
+      "Refluxösophagitis",
+      "Chronische Pankreatitis",
+      "Pankreas-Ca",
+      "Magen-Ca",
+      "Appendizitis",
+      "Herzinfarkt (Hinterwandinfarkt)",
+    ] },
+  { nr: 17, symptom: "Schmerzen linker / rechter Unterbauch",
+    diagnosen: [
+      "Appendizitis",
+      "Divertikulitis",
+      "M. Crohn",
+      "Kolorektales Karzinom",
+      "Mesenterialinfarkt",
+      "Nierensteine / Harnleiterkolik",
+    ] },
+  { nr: 18, symptom: "Dysphagie (Schluckstörung)",
+    diagnosen: [
+      "Ösophagus-Ca",
+      "Refluxösophagitis / Ösophagitis",
+      "Hiatushernie, paraösophageale Form",
+      "Apoplex (Mediainfarkt, Hirnstamminfarkt)",
+      "M. Parkinson",
+      "Euthyreote Struma",
+      "Hyperaldosteronismus (M. Conn)",
+    ] },
+  { nr: 19, symptom: "Ikterus",
+    diagnosen: [
+      "Cholezystitis / Cholangitis",
+      "Akute Virushepatitis",
+      "Chronische Hepatitis",
+      "Gallensteine",
+      "Pankreas-Ca",
+      "Akute / chronische Pankreatitis",
+      "Leberzirrhose",
+      "Lebermetastasen / primäres Leberzell-Ca",
+      "Angeborene Hypothyreose",
+    ] },
+  { nr: 20, symptom: "Schmerzen rechter Oberbauch",
+    diagnosen: [
+      "Cholezystitis / Cholangitis",
+      "Akute Virushepatitis",
+      "Chronische Hepatitis",
+      "Leberzirrhose",
+      "Lebermetastasen / primäres Leberzell-Ca",
+      "Rechtsherzinsuffizienz",
+    ] },
+  { nr: 21, symptom: "Gewichtsverlust (Kachexie)",
+    diagnosen: [
+      "M. Crohn / Colitis ulcerosa",
+      "Chronische Pankreatitis",
+      "Leberzirrhose",
+      "Sekundäre Knochentumore (Metastasen)",
+      "Plasmozytom",
+      "Leukämien",
+      "Polymyalgia rheumatica",
+      "Hyperthyreose",
+      "Diabetes mellitus",
+      "Tuberkulose",
+      "Bronchialkarzinom",
+      "Nierenzellkarzinom / Urothelkarzinom",
+      "Harnwegsinfekt (bei Säuglingen und alten Menschen)",
+      "Trigeminusneuralgie",
+    ] },
+  { nr: 22, symptom: "Hämaturie",
+    diagnosen: [
+      "Glomerulonephritis",
+      "IgA-Nephropathie",
+      "Urothelkarzinom",
+      "Nierenzellkarzinom",
+      "Nephroblastom (Wilms-Tumor)",
+      "Nierensteine",
+      "Akute Prostatitis",
+      "Harnwegsinfekt",
+      "Urogenital-Tuberkulose",
+      "Infektiöse Endokarditis",
+    ] },
+  { nr: 23, symptom: "Häufiges Wasserlassen (Pollakisurie)",
+    diagnosen: [
+      "Zystitis / Harnwegsinfekt",
+      "Benigne Prostatahyperplasie",
+      "Prostatakarzinom",
+      "Urothelkarzinom",
+      "Diabetes mellitus",
+      "Coma diabeticum (hyperosmolare Form)",
+      "Hyperaldosteronismus (M. Conn)",
+      "Urogenital-Tuberkulose",
+    ] },
+  { nr: 24, symptom: "Nykturie",
+    diagnosen: [
+      "Benigne Prostatahyperplasie",
+      "Prostatakarzinom",
+      "Harnwegsinfekt",
+      "Rechtsherzinsuffizienz",
+    ] },
+  { nr: 25, symptom: "Schmerzen beim Wasserlassen (Algurie / Dysurie)",
+    diagnosen: [
+      "Zystitis / Harnwegsinfekt",
+      "Akute Prostatitis",
+      "Urethritis",
+      "Pyelonephritis",
+      "Urothelkarzinom",
+      "Nierensteine",
+      "Urogenital-Tuberkulose",
+      "Arterielle Hypertonie",
+    ] },
+  { nr: 26, symptom: "Kopfschmerz",
+    diagnosen: [
+      "Spannungskopfschmerz",
+      "Migräne",
+      "Cluster-Kopfschmerz",
+      "Trigeminusneuralgie",
+      "Bakterielle Meningitis",
+      "Lymphozytäre Meningitis",
+      "Enzephalitis",
+      "Schädel-Hirn-Trauma",
+      "Zerebrovaskuläre Insuffizienz / Hirnstamminfarkt",
+      "Multiple Sklerose",
+      "Arterielle Hypertonie",
+      "Hypotonie / hypotone Kreislaufdysregulation",
+      "Glomerulonephritis",
+      "Harnwegsinfekt (bei Säuglingen und alten Menschen)",
+      "Rheumatisches Fieber",
+      "Lyme-Borreliose",
+      "Plasmozytom",
+      "Polymyalgia rheumatica",
+      "Pneumonie, atypische Verlaufsform (Legionellose, Chlamydien)",
+    ] },
+  { nr: 27, symptom: "Paraparese / Hemiparese",
+    diagnosen: [
+      "Apoplex / zerebrovaskuläre Insuffizienz",
+      "Multiple Sklerose",
+      "Myelitis",
+      "Bakterielle Meningitis / Enzephalitis",
+      "Schädel-Hirn-Trauma (Contusio / Compressio cerebri)",
+      "Anfallskrankheiten",
+      "Polyneuropathie",
+      "Periphere Nervenläsion",
+      "Sekundäre Knochentumore (Wirbelsäulenmetastasen)",
+      "Kompartmentsyndrom",
+      "Chronische Gastritis Typ A",
+    ] },
+  { nr: 28, symptom: "Tremor",
+    diagnosen: [
+      "M. Parkinson",
+      "Multiple Sklerose",
+      "Hyperthyreose",
+      "Hypoglykämischer Schock",
+    ] },
+];
+
+// Alle Krankheitsbilder (119), nach Organsystem — Grundlage für "Krankheitsbild ziehen".
+const PATHO_KB = [
+  // Herz/Kreislauf
+  { name: "Angina pectoris", system: "Herz/Kreislauf" },
+  { name: "Herzinfarkt", system: "Herz/Kreislauf" },
+  { name: "Linksherzinsuffizienz", system: "Herz/Kreislauf" },
+  { name: "Rechtsherzinsuffizienz", system: "Herz/Kreislauf" },
+  { name: "Globalinsuffizienz", system: "Herz/Kreislauf" },
+  { name: "Arterielle Hypertonie", system: "Herz/Kreislauf" },
+  { name: "Hypotonie / hypotone Kreislaufdysregulation", system: "Herz/Kreislauf" },
+  { name: "Schock (inkl. anaphylaktischer Schock)", system: "Herz/Kreislauf" },
+  { name: "Tachykarde Herzrhythmusstörungen", system: "Herz/Kreislauf" },
+  { name: "Bradykarde Herzrhythmusstörungen", system: "Herz/Kreislauf" },
+  { name: "Perikarditis", system: "Herz/Kreislauf" },
+  { name: "Konstriktive Perikarditis", system: "Herz/Kreislauf" },
+  { name: "Infektiöse Endokarditis", system: "Herz/Kreislauf" },
+  { name: "Aortenklappenstenose", system: "Herz/Kreislauf" },
+  { name: "Mitralstenose", system: "Herz/Kreislauf" },
+  { name: "Mitralinsuffizienz", system: "Herz/Kreislauf" },
+  { name: "Pulmonalklappenstenose", system: "Herz/Kreislauf" },
+  { name: "Trikuspidalinsuffizienz / -stenose", system: "Herz/Kreislauf" },
+  { name: "Lungenödem", system: "Herz/Kreislauf" },
+  { name: "pAVK", system: "Herz/Kreislauf" },
+  { name: "Akuter Arterienverschluss", system: "Herz/Kreislauf" },
+  { name: "Phlebothrombose", system: "Herz/Kreislauf" },
+  { name: "Varikosis / chronisch-venöse Insuffizienz", system: "Herz/Kreislauf" },
+  { name: "Kompartmentsyndrom", system: "Herz/Kreislauf" },
+  // Atmung
+  { name: "Asthma bronchiale", system: "Atmung" },
+  { name: "Chronische (obstruktive) Bronchitis", system: "Atmung" },
+  { name: "Lungenemphysem", system: "Atmung" },
+  { name: "Bronchiektasen", system: "Atmung" },
+  { name: "Pneumonie", system: "Atmung" },
+  { name: "Tuberkulose / Pleuritis tuberculosa", system: "Atmung" },
+  { name: "Sarkoidose / Löfgren-Syndrom", system: "Atmung" },
+  { name: "Bronchialkarzinom / Pancoast-Tumor", system: "Atmung" },
+  { name: "Lungenembolie", system: "Atmung" },
+  { name: "Cor pulmonale / pulmonale Hypertonie", system: "Atmung" },
+  { name: "Pneumothorax", system: "Atmung" },
+  { name: "Rippenserienfraktur", system: "Atmung" },
+  // Verdauung
+  { name: "Refluxösophagitis", system: "Verdauung" },
+  { name: "Ösophagitis", system: "Verdauung" },
+  { name: "Paraösophageale Hiatushernie", system: "Verdauung" },
+  { name: "Ösophagus-Ca", system: "Verdauung" },
+  { name: "Akute (erosive) Gastritis", system: "Verdauung" },
+  { name: "Chronische Gastritis Typ A", system: "Verdauung" },
+  { name: "Gastroduodenale Ulkuskrankheit", system: "Verdauung" },
+  { name: "Magen-Ca", system: "Verdauung" },
+  { name: "M. Crohn", system: "Verdauung" },
+  { name: "Colitis ulcerosa", system: "Verdauung" },
+  { name: "Divertikulose / Divertikulitis", system: "Verdauung" },
+  { name: "Appendizitis", system: "Verdauung" },
+  { name: "Kolonpolypen (Adenome)", system: "Verdauung" },
+  { name: "Kolorektales Karzinom", system: "Verdauung" },
+  { name: "Mechanischer Ileus", system: "Verdauung" },
+  { name: "Paralytischer Ileus", system: "Verdauung" },
+  { name: "Mesenterialinfarkt", system: "Verdauung" },
+  { name: "Akute Pankreatitis", system: "Verdauung" },
+  { name: "Chronische Pankreatitis", system: "Verdauung" },
+  { name: "Pankreas-Ca", system: "Verdauung" },
+  { name: "Akute Virushepatitis", system: "Verdauung" },
+  { name: "Chronische Hepatitis", system: "Verdauung" },
+  { name: "Leberzirrhose", system: "Verdauung" },
+  { name: "Lebermetastasen / primäres Leberzell-Ca", system: "Verdauung" },
+  { name: "Cholezystitis / Cholangitis", system: "Verdauung" },
+  { name: "Gallensteine", system: "Verdauung" },
+  // Niere/Harnwege
+  { name: "Glomerulonephritis", system: "Niere/Harnwege" },
+  { name: "IgA-Nephropathie", system: "Niere/Harnwege" },
+  { name: "Antibasalmembran-Glomerulonephritis (Goodpasture)", system: "Niere/Harnwege" },
+  { name: "Zystitis / Harnwegsinfekt", system: "Niere/Harnwege" },
+  { name: "Pyelonephritis", system: "Niere/Harnwege" },
+  { name: "Urethritis", system: "Niere/Harnwege" },
+  { name: "Urogenital-Tuberkulose", system: "Niere/Harnwege" },
+  { name: "Nierensteine", system: "Niere/Harnwege" },
+  { name: "Akutes Nierenversagen", system: "Niere/Harnwege" },
+  { name: "Chronische Niereninsuffizienz / Urämie", system: "Niere/Harnwege" },
+  { name: "Nephroblastom (Wilms-Tumor)", system: "Niere/Harnwege" },
+  { name: "Nierenzellkarzinom", system: "Niere/Harnwege" },
+  { name: "Urothelkarzinom", system: "Niere/Harnwege" },
+  { name: "Akute Prostatitis", system: "Niere/Harnwege" },
+  { name: "Benigne Prostatahyperplasie", system: "Niere/Harnwege" },
+  { name: "Prostatakarzinom", system: "Niere/Harnwege" },
+  // Endokrin
+  { name: "Diabetes mellitus (inkl. autonomer Neuropathie)", system: "Endokrin" },
+  { name: "Coma diabeticum", system: "Endokrin" },
+  { name: "Hypoglykämischer Schock", system: "Endokrin" },
+  { name: "Hyperthyreose (inkl. thyreotoxischer Krise)", system: "Endokrin" },
+  { name: "Hypothyreose", system: "Endokrin" },
+  { name: "Angeborene Hypothyreose", system: "Endokrin" },
+  { name: "Euthyreote Struma", system: "Endokrin" },
+  { name: "Hyperkortisolismus (M. Cushing)", system: "Endokrin" },
+  { name: "Hyperaldosteronismus (M. Conn)", system: "Endokrin" },
+  // Bewegungsapparat / Knochen
+  { name: "Bakterielle (eitrige) Arthritis", system: "Bewegungsapparat / Knochen" },
+  { name: "Rheumatisches Fieber", system: "Bewegungsapparat / Knochen" },
+  { name: "Reaktive Arthritis / Reiter-Syndrom", system: "Bewegungsapparat / Knochen" },
+  { name: "Lyme-Borreliose", system: "Bewegungsapparat / Knochen" },
+  { name: "Arthrosis deformans", system: "Bewegungsapparat / Knochen" },
+  { name: "Rheumatoide Arthritis", system: "Bewegungsapparat / Knochen" },
+  { name: "Arthritis psoriatica", system: "Bewegungsapparat / Knochen" },
+  { name: "M. Bechterew", system: "Bewegungsapparat / Knochen" },
+  { name: "Gicht", system: "Bewegungsapparat / Knochen" },
+  { name: "Polymyalgia rheumatica", system: "Bewegungsapparat / Knochen" },
+  { name: "Osteoporose", system: "Bewegungsapparat / Knochen" },
+  { name: "Osteomyelitis", system: "Bewegungsapparat / Knochen" },
+  { name: "Plasmozytom", system: "Bewegungsapparat / Knochen" },
+  { name: "Leukämien", system: "Bewegungsapparat / Knochen" },
+  { name: "Sekundäre Knochentumore (Metastasen)", system: "Bewegungsapparat / Knochen" },
+  { name: "Traumatische Genese (Frakturen, Luxationen)", system: "Bewegungsapparat / Knochen" },
+  // Neuro
+  { name: "Anfallskrankheiten (Grand mal)", system: "Neuro" },
+  { name: "M. Parkinson", system: "Neuro" },
+  { name: "Multiple Sklerose", system: "Neuro" },
+  { name: "Migräne", system: "Neuro" },
+  { name: "Spannungskopfschmerz", system: "Neuro" },
+  { name: "Cluster-Kopfschmerz", system: "Neuro" },
+  { name: "Trigeminusneuralgie", system: "Neuro" },
+  { name: "Restless-Legs-Syndrom", system: "Neuro" },
+  { name: "Bakterielle Meningitis", system: "Neuro" },
+  { name: "Lymphozytäre Meningitis", system: "Neuro" },
+  { name: "Enzephalitis", system: "Neuro" },
+  { name: "Myelitis", system: "Neuro" },
+  { name: "Zerebrovaskuläre Insuffizienz / TIA / Apoplex", system: "Neuro" },
+  { name: "Schädel-Hirn-Trauma", system: "Neuro" },
+  { name: "Polyneuropathie", system: "Neuro" },
+  { name: "Periphere Nervenläsion", system: "Neuro" },
+];
+
+// Bildbefunde (23) — Grundlage für "Bild beschreiben".
+const PATHO_BILDER = [
+  "Schwellung und Rötung im Gesicht",
+  "Offene Luxationsfraktur",
+  "Aszites",
+  "Borreliose",
+  "Geschlossene Unterarmfraktur",
+  "Gürtelrose (Herpes zoster)",
+  "Erysipel",
+  "Entzündetes Auge",
+  "Anus praeter",
+  "Ikterus",
+  "Osteosarkom",
+  "pAVK",
+  "Rheumatoide Arthritis – Hand",
+  "Rheumatoide Arthritis – Röntgen",
+  "Erythema migrans",
+  "Hüftarthrose – Röntgen",
+  "Pink Puffer",
+  "Bronchial-Ca – Röntgen",
+  "Gicht",
+  "Malignes Melanom",
+  "Caput medusae",
+  "Thorakaler Gibbus",
+  "Mamma-Ca",
+];
+
+// Feste Gliederungshilfe, die unter einem gezogenen Krankheitsbild erscheint.
+const PATHO_GLIEDERUNG = [
+  "Definition", "Ätiologie", "Pathogenese", "Klinik",
+  "Diagnostik", "Therapie", "Komplikationen", "Prognose",
+];
+
+// ---- Pathologie-Prüfung: reiner Zufallsgenerator (nichts wird gespeichert) ----
+(function(){
+  const $ = id => document.getElementById(id);
+  const mischen = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]] = [b[j],b[i]]; } return b; };
+
+  function neuerPool(name, quelle, verlaufId, statusId){
+    return { name, quelle, verlaufId, statusId, rest: mischen(quelle), verlauf: [], gezogen: 0 };
+  }
+  const pools = {
+    sym:  neuerPool("sym",  PATHO_SYMPTOME, "pSymVerlauf", "pSymStatus"),
+    kb:   neuerPool("kb",   PATHO_KB,       "pKbVerlauf",  "pKbStatus"),
+    bild: neuerPool("bild", PATHO_BILDER,   "pBildVerlauf","pBildStatus")
+  };
+
+  function verlaufZeigen(p){
+    const el = $(p.verlaufId);
+    const zeilen = p.verlauf.slice(0, 5);
+    el.innerHTML = "";
+    if (!zeilen.length) return;
+    const titel = document.createElement("div");
+    titel.className = "pVerlaufTitel";
+    titel.textContent = "Zuletzt gezogen";
+    el.appendChild(titel);
+    zeilen.forEach(z => {
+      const d = document.createElement("div");
+      d.className = z.trenn ? "pTrenn" : "pVerlaufZeile";
+      d.textContent = z.text;
+      el.appendChild(d);
+    });
+  }
+
+  function ziehen(p, label){
+    let hinweis = "";
+    if (!p.rest.length){
+      p.rest = mischen(p.quelle);
+      p.gezogen = 0;
+      p.verlauf.unshift({trenn: true, text: "— neue Runde —"});
+      hinweis = "Runde beendet — neue Runde. ";
+    }
+    const e = p.rest.pop();
+    p.gezogen++;
+    p.verlauf.unshift({text: label(e)});
+    verlaufZeigen(p);
+    $(p.statusId).textContent = hinweis + p.gezogen + " von " + p.quelle.length + " in dieser Runde";
+    return e;
+  }
+
+  // Symptom + Diagnosen
+  let aktSymptom = null, diagRest = [], diagGezeigt = [];
+  function diagListe(){
+    const ul = $("pDiagListe");
+    ul.innerHTML = "";
+    diagGezeigt.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+  }
+  function diagKnoepfe(){
+    $("pEineDiag").disabled = !aktSymptom || !diagRest.length;
+    $("pAlleDiag").disabled = !aktSymptom || diagGezeigt.length === (aktSymptom ? aktSymptom.diagnosen.length : 0);
+  }
+  $("pSymZiehen").onclick = () => {
+    aktSymptom = ziehen(pools.sym, e => e.symptom);
+    $("pSymName").textContent = aktSymptom.symptom;
+    $("pSymName").classList.remove("pLeer");
+    diagRest = mischen(aktSymptom.diagnosen);
+    diagGezeigt = [];
+    $("pDiagInfo").textContent = aktSymptom.diagnosen.length + " Diagnosen hinterlegt";
+    diagListe(); diagKnoepfe();
+  };
+  $("pEineDiag").onclick = () => {
+    if (!aktSymptom) return;
+    if (!diagRest.length){ $("pDiagInfo").textContent = "Alle Diagnosen genannt"; diagKnoepfe(); return; }
+    diagGezeigt.push(diagRest.pop());
+    diagListe();
+    $("pDiagInfo").textContent = diagRest.length ? diagGezeigt.length + " von " + aktSymptom.diagnosen.length + " genannt" : "Alle Diagnosen genannt";
+    diagKnoepfe();
+  };
+  $("pAlleDiag").onclick = () => {
+    if (!aktSymptom) return;
+    diagGezeigt = aktSymptom.diagnosen.slice();
+    diagRest = [];
+    diagListe();
+    $("pDiagInfo").textContent = "Alle Diagnosen genannt";
+    diagKnoepfe();
+  };
+
+  // Krankheitsbild
+  $("pKbZiehen").onclick = () => {
+    const e = ziehen(pools.kb, x => x.name);
+    $("pKbName").textContent = e.name;
+    $("pKbName").classList.remove("pLeer");
+    $("pKbSystem").textContent = e.system;
+    $("pGliederung").textContent = PATHO_GLIEDERUNG.join(" · ");
+    $("pGliederung").classList.remove("hide");
+  };
+
+  // Bild beschreiben
+  $("pBildZiehen").onclick = () => {
+    const e = ziehen(pools.bild, x => x);
+    $("pBildName").textContent = e;
+    $("pBildName").classList.remove("pLeer");
+  };
+
+  function allesZuruecksetzen(){
+    Object.keys(pools).forEach(k => {
+      const p = pools[k];
+      p.rest = mischen(p.quelle); p.gezogen = 0; p.verlauf = [];
+      verlaufZeigen(p);
+      $(p.statusId).textContent = "";
+    });
+    aktSymptom = null; diagRest = []; diagGezeigt = [];
+    $("pSymName").textContent = "Noch kein Symptom gezogen"; $("pSymName").classList.add("pLeer");
+    $("pDiagInfo").textContent = ""; diagListe(); diagKnoepfe();
+    $("pKbName").textContent = "Noch kein Krankheitsbild gezogen"; $("pKbName").classList.add("pLeer");
+    $("pKbSystem").textContent = ""; $("pGliederung").classList.add("hide");
+    $("pBildName").textContent = "Noch kein Bild gezogen"; $("pBildName").classList.add("pLeer");
+  }
+  $("pReset").onclick = allesZuruecksetzen;
+
+  // Navigation (die bestehenden Säulen bleiben unberührt)
+  $("waehlePatho").onclick = () => {
+    ["start","home","exam","result","cranioWahl"].forEach(id => $(id).classList.add("hide"));
+    $("patho").classList.remove("hide");
+    $("titel").textContent = "Pathologie-Prüfung";
+    $("count").textContent = PATHO_SYMPTOME.length + " Symptome · " + PATHO_KB.length + " Krankheitsbilder";
+    window.scrollTo(0,0);
+  };
+  $("pZurueck").onclick = () => { $("patho").classList.add("hide"); startseite(); };
+
+  allesZuruecksetzen();
+})();
 </script>
 </body>
 </html>
