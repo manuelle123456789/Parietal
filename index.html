@@ -381,17 +381,19 @@ function buildExam(){
   }
   const out = [], used = new Set();
   const take = s => {
-    const frei = kandidaten(pool(s)).filter(q => !used.has(q.id));
-    const ersatz = verfuegbar(pool(s)).filter(q => !used.has(q.id));
-    const uebrig = pool(s).filter(q => !used.has(q.id));
-    const q = pick(frei.length ? frei : ersatz.length ? ersatz : uebrig.length ? uebrig : pool(s));
+    const P = [].concat(s).flatMap(pool);
+    const frei = kandidaten(P).filter(q => !used.has(q.id));
+    const ersatz = verfuegbar(P).filter(q => !used.has(q.id));
+    const uebrig = P.filter(q => !used.has(q.id));
+    const q = pick(frei.length ? frei : ersatz.length ? ersatz : uebrig.length ? uebrig : P);
     used.add(q.id); out.push(q);
   };
   ["Knie","Hüfte","Fuß"].forEach(take);
   take(pick(["Knie","Hüfte","Fuß"]));
   take("LWS");
-  take(Math.random() < 0.2 ? "Rippen" : "BWS");
-  take("HWS"); take("ISG/SIG");
+  take("BWS");
+  take("HWS");
+  take(["ISG/SIG","Rippen"]);
   take("OEX"); take("OEX");
   return out;
 }
@@ -730,7 +732,7 @@ function waehle(s){
   byId("titel").textContent = TITEL[s];
   byId("count").textContent = alle().length + " Fragen";
   byId("pruefInfo").textContent = s === "parietal"
-    ? "10 Fragen: Knie, Hüfte, Fuß und eine vierte aus der unteren Extremität; LWS, BWS oder Rippen, HWS, ISG/SIG; dazu zwei zur oberen Extremität."
+    ? "10 Fragen: Knie, Hüfte, Fuß und eine vierte aus der unteren Extremität; LWS, BWS, HWS und eine aus Becken/ISG-SIG oder Rippen; dazu zwei zur oberen Extremität."
     : s === "cranio"
       ? "10 zufällige Fragen aus dem Cranio-Fragenkatalog, je 2 Punkte."
       : s === "viszeral"
@@ -939,7 +941,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-10-19.2";
+const APP_VERSION = "2026-10-19.3";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
