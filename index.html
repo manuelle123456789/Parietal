@@ -941,7 +941,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-10-22.2";
+const APP_VERSION = "2026-10-23.1";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
@@ -2703,6 +2703,18 @@ const PATHO_GLIEDERUNG = [
 // ---- Alte Prüfungen (nur Fragen, noch ohne Antworten) ----
 const ALTE_PRUEFUNGEN = {
   parietal: {
+    "2026": [
+      "Welche Gelenkart/-Typ ist das Sternoclaviculargelenk?",
+      "In welcher Position hat man den größten Gelenkflächenkontakt im Ellenbogen?",
+      "Nenne die sensible Versorgung des Hinterhaupts.",
+      "Nenne 4 Unterschiede des medialen und lateralen Meniskus.",
+      "Beschreibe den venösen Abfluss der BWS und der Thoraxwand.",
+      "Beschreibe die möglichen Behandlungen einer Ilium-anterior-Dysfunktion.",
+      "Beschreibe den osteopathischen Befund einer internen Verstauchung bzw. eines Supinationstraumas des OSG.",
+      "Nenne 4 Symptome, die dich an ein femoroacetabuläres Impingement denken lassen.",
+      "Nenne 3 Engstellen des Plexus brachialis.",
+      "Beschreibe eine Typ-II-Dysfunktion lumbal."
+    ],
     "2025": [
       "Beschreibe und erkläre eine Konvergenzhemmung links in der unteren BWS und wie diese korrigiert wird.",
       "Was beeinflusst die Fibula in ihrer Bewegung?",
