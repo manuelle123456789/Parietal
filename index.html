@@ -941,7 +941,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-10-23.1";
+const APP_VERSION = "2026-10-23.2";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
@@ -2702,6 +2702,20 @@ const PATHO_GLIEDERUNG = [
 
 // ---- Alte Prüfungen (nur Fragen, noch ohne Antworten) ----
 const ALTE_PRUEFUNGEN = {
+  cranio: {
+    "2025": [
+      "Foramina, Gefäße und Nerven des Os ethmoidale.",
+      "Knöcherne Partner der Maxilla.",
+      "Kompression der Sutura sphenopetrosa und ihre Folgen.",
+      "Teile des Occiput bei Geburt und ihre Verknöcherung.",
+      "Foramina und Durchgänge des Occiput.",
+      "Was kann zu einer erhöhten Spannung der RSM führen?",
+      "Mindestens 4 Ursachen für einen Vertical Strain.",
+      "Welche Behandlungsprinzipien in der craniosacralen Behandlung kennen Sie?",
+      "Ansatz der Falx cerebri und was sie bildet.",
+      "Patient kommt mit Ein- und Durchschlafproblemen. Befund zeigt eine SSB-Kompression. Was zeigt sich in der Anamnese?"
+    ]
+  },
   parietal: {
     "2026": [
       "Welche Gelenkart/-Typ ist das Sternoclaviculargelenk?",
