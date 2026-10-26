@@ -179,6 +179,12 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 #pVerlauf div{padding:7px 0;border-top:1px solid var(--line);font-size:.95rem}
 .pTyp{color:var(--muted);font-size:.8rem}
 .pTrenn{color:var(--muted);font-style:italic;font-size:.82rem!important}
+/* Fortsetzen-Kästchen unter der jeweiligen Säule */
+.stack > .fortsetzen{width:86%;justify-self:end;box-sizing:border-box;margin-top:-6px;padding:8px 8px 8px 14px;border-left-color:var(--amber);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fortsetzen .fzText{font-family:Newsreader,Georgia,serif;font-size:1.05rem;line-height:1.25}
+.fortsetzen .fzKnoepfe{display:flex;gap:6px;flex:none}
+.fortsetzen .fzKnoepfe button{min-height:34px;padding:4px 10px;font-size:.85rem;width:auto}
+.stack > .fortsetzen{flex-wrap:wrap;row-gap:6px}.fortsetzen .fzText{flex:1 1 100%}
 </style>
 </head>
 <body>
@@ -2143,7 +2149,55 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>auf chemische Beschaffenheit zu überprüfen</p>
 </li>
 </ul>
-<h3>b. Schleimhaut</h3>
+<h3>b. Knochen</h3>
+<p><strong>Dach</strong></p>
+<ul>
+<li><p>Os nasale</p>
+</li>
+<li><p>Os frontale (Spina nasalis / Pars nasalis)</p>
+</li>
+<li><p>Os ethmoidale (Lamina cribrosa)</p>
+</li>
+<li><p>Os sphenoidale (Corpus)</p>
+</li>
+</ul>
+<p><strong>Boden (= harter Gaumen)</strong></p>
+<ul>
+<li><p>Maxilla (Proc. palatinus)</p>
+</li>
+<li><p>Os palatinum (Lamina horizontalis)</p>
+</li>
+</ul>
+<p><strong>Nasenscheidewand (Septum)</strong></p>
+<ul>
+<li><p>Os ethmoidale (Lamina perpendicularis)</p>
+</li>
+<li><p>Vomer</p>
+</li>
+<li><p>Vorne: Cartilago septi nasi</p>
+</li>
+</ul>
+<p><strong>Seitenwand</strong></p>
+<ul>
+<li><p>Maxilla (Proc. frontalis und Corpus)</p>
+</li>
+<li><p>Os lacrimale</p>
+</li>
+<li><p>Os ethmoidale (Labyrinth mit Concha nasalis superior und media)</p>
+</li>
+<li><p>Concha nasalis inferior (eigener Knochen)</p>
+</li>
+<li><p>Os palatinum (Lamina perpendicularis)</p>
+</li>
+<li><p>Proc. pterygoideus des Sphenoids (hinten)</p>
+</li>
+</ul>
+<p><strong>Vorderwand</strong></p>
+<ul>
+<li><p>Apertura piriformis, gebildet von den Ossa nasalia und den Maxillae</p>
+</li>
+</ul>
+<h3>c. Schleimhaut</h3>
 <p><strong>Respiratorische Schleimhaut</strong></p>
 <ul>
 <li><p>Mehrreihiges Flimmerepithel mit Becherzellen und dicker Basalmembran</p>
@@ -2162,7 +2216,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>Riechzellen sind Chemorezeptoren (primäre Sinneszellen)</p>
 </li>
 </ul>
-<h3>c. Innervation</h3>
+<h3>d. Innervation</h3>
 <p><strong>Sensibel</strong></p>
 <ul>
 <li><p>Äste des N. ophthalmicus (V1): vordere und obere Nasenhöhle</p>
@@ -2198,7 +2252,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>→ Nasenschleimhaut</p>
 </li>
 </ul>
-<h3>d. Durchblutung</h3>
+<h3>e. Durchblutung</h3>
 <p><strong>Arteriell – Nasenhöhle vorne</strong></p>
 <ul>
 <li><p>R. lateralis nasi</p>
@@ -2251,14 +2305,14 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>V. ophthalmica sup. → Sinus cavernosus → Sinus petrosus superior → Sinus transversus → Sinus sigmoideus → V. jugularis interna</p>
 </li>
 </ul>
-<h3>e. Lymphabfluss</h3>
+<h3>f. Lymphabfluss</h3>
 <ul>
 <li><p>Nodi lymphatici retropharyngeales: hier fließt der größte Teil der Lymphe hin</p>
 </li>
 <li><p>Ein kleiner Teil gelangt auch zu den submandibulären Lymphknoten</p>
 </li>
 </ul>
-<h3>f. Vestibulum nasi, Septum nasi, Conchae nasales</h3>
+<h3>g. Vestibulum nasi, Septum nasi, Conchae nasales</h3>
 <p><strong>Nasenvorhof / Vestibulum nasi</strong></p>
 <ul>
 <li><p>Unmittelbar an den Nasenlöchern angrenzender Teil</p>
@@ -2286,7 +2340,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>Regelung des Luftstromes</p>
 </li>
 </ul>
-<h3>g. Nasennebenhöhlen / Sinus paranasales</h3>
+<h3>h. Nasennebenhöhlen / Sinus paranasales</h3>
 <p><strong>Aufgaben</strong></p>
 <ul>
 <li><p>Gewichtsersparnis</p>
@@ -2318,7 +2372,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>Ohrtrompete (Ostium Tuba auditiva)</p>
 </li>
 </ul>
-<h3>h. Nachbarschaft</h3>
+<h3>i. Nachbarschaft</h3>
 <ul>
 <li><p>Augenhöhle</p>
 </li>
@@ -2335,7 +2389,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>Rachen</p>
 </li>
 </ul>
-<h3>i. Rachen / Pharynx</h3>
+<h3>j. Rachen / Pharynx</h3>
 <p>Der Rachen gehört zum Atmungs- und Verdauungssystem.</p>
 <p><strong>4 Öffnungen</strong></p>
 <ul>
@@ -2370,7 +2424,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>Tela submucosa: Das unter der Schleimhaut befindliche Bindegewebe wird durch die Fascia pharyngobasilaris verstärkt. Im Hypopharynx befindet sich ein dichtes Venengeflecht (Plexus pharyngeus)</p>
 </li>
 </ul>
-<h3>j. Muskelwand</h3>
+<h3>k. Muskelwand</h3>
 <p><strong>Schlundschnürer: quer und längs verlaufende ringförmige Muskulatur („schnüren“, heben und senken)</strong></p>
 <ul>
 <li><p>M. constrictor pharyngis superior</p>
@@ -2416,7 +2470,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 </ul>
 </li>
 </ul>
-<h3>k. Innervation des Pharynx</h3>
+<h3>l. Innervation des Pharynx</h3>
 <p><strong>Motorisch</strong></p>
 <ul>
 <li><p>Die Rr. pharyngei des N. glossopharyngeus (IX) und des N. vagus (X) vereinigen sich im Plexus pharyngeus</p>
@@ -2434,7 +2488,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>N. vagus (X): Kehldeckelgrube, Unterrachenraum, auch Teile des Mundrachenraumes</p>
 </li>
 </ul>
-<h3>l. Venen und lymphatischer Rachenring</h3>
+<h3>m. Venen und lymphatischer Rachenring</h3>
 <p><strong>Venen</strong></p>
 <ul>
 <li><p>Im Unterrachenraum befindet sich innerhalb und außerhalb der Muskelwand der Plexus pharyngeus</p>
@@ -2453,7 +2507,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 <li><p>Tonsilla lingualis (Zungenmandel)</p>
 </li>
 </ul>
-<h3>m. Aufhängung des Pharynx am Schädel</h3>
+<h3>n. Aufhängung des Pharynx am Schädel</h3>
 <p><strong>Faszien</strong></p>
 <ul>
 <li><p>Fascia buccopharyngea</p>
@@ -2517,6 +2571,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 </li>
 </ul>
 </details>
+
 
 
 
@@ -3401,48 +3456,54 @@ function cranioWahl(){
 }
 
 const LAUF = "bao_laufend";
+const LAUF_SAEULEN = ["parietal", "cranio", "hirnnerven", "viszeral"];
+function laufKey(s){ return LAUF + "_" + s; }
+(function(){ try {
+  const alt = JSON.parse(localStorage.getItem(LAUF) || "null");
+  if (alt && alt.s && !localStorage.getItem(laufKey(alt.s))) localStorage.setItem(laufKey(alt.s), JSON.stringify(alt));
+  localStorage.removeItem(LAUF);
+} catch(e) {} })();
 function laufSpeichern(){
   if (mode === "drill" || mode === "schwach") return;
   try {
-    localStorage.setItem(LAUF, JSON.stringify({s: saeule, m: mode, ids: current.map(q => q.id), sc: scores, t: Date.now()}));
+    localStorage.setItem(laufKey(saeule), JSON.stringify({s: saeule, m: mode, ids: current.map(q => q.id), sc: scores, t: Date.now()}));
   } catch(e) {}
 }
-function laufLaden(){ try { return JSON.parse(localStorage.getItem(LAUF) || "null"); } catch(e) { return null; } }
-function laufLoeschen(){ try { localStorage.removeItem(LAUF); } catch(e) {} }
+function laufLaden(s){ try { return JSON.parse(localStorage.getItem(laufKey(s)) || "null"); } catch(e) { return null; } }
+function laufLoeschen(s){ try { localStorage.removeItem(laufKey(s || saeule)); } catch(e) {} }
 
 function fortsetzenKarte(){
-  const alt = byId("fortsetzen");
-  if (alt) alt.remove();
-  const st = laufLaden();
-  if (!st || !st.ids || !st.ids.length) return;
-  const liste = st.ids.map(id => DATA.find(q => q.id === id));
-  if (liste.some(q => !q)) { laufLoeschen(); return; }
-  const bewertet = (st.sc || []).filter(x => x !== null).length;
-  const datum = new Date(st.t).toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"});
-  const box = document.createElement("div");
-  box.id = "fortsetzen";
-  box.className = "card";
-  box.style.borderLeftColor = "var(--amber)";
-  const t = document.createElement("p");
-  t.className = "q";
-  t.style.marginBottom = "4px";
-  t.textContent = "Unterbrochene Prüfung fortsetzen?";
-  const n = document.createElement("p");
-  n.className = "note";
-  n.style.marginTop = "0";
-  n.textContent = TITEL[st.s] + " vom " + datum + " – " + bewertet + " von " + liste.length + " Fragen bewertet";
-  const row = document.createElement("div");
-  row.className = "row";
-  row.style.marginTop = "10px";
-  const ja = document.createElement("button");
-  ja.className = "primary"; ja.textContent = "Fortsetzen";
-  ja.onclick = () => { waehle(st.s === "hirnnerven" ? "cranio" : st.s); saeule = st.s; render(liste, true, st.m, st.sc); };
-  const nein = document.createElement("button");
-  nein.textContent = "Verwerfen";
-  nein.onclick = () => { laufLoeschen(); box.remove(); };
-  row.append(ja, nein);
-  box.append(t, n, row);
-  byId("start").querySelector(".stack").prepend(box);
+  document.querySelectorAll(".fortsetzen").forEach(el => el.remove());
+  const unter = {parietal: "waehleParietal", cranio: "waehleCranio", hirnnerven: "waehleCranio", viszeral: "waehleViszeral"};
+  const ziel = {};
+  LAUF_SAEULEN.forEach(s => {
+    const st = laufLaden(s);
+    if (!st || !st.ids || !st.ids.length) return;
+    const liste = st.ids.map(id => DATA.find(q => q.id === id));
+    if (liste.some(q => !q)) { laufLoeschen(s); return; }
+    const bewertet = (st.sc || []).filter(x => x !== null).length;
+    const NAME = {parietal: "Parietal-Prüfung", cranio: "Cranio-Prüfung", hirnnerven: "Hirnnerven-Prüfung", viszeral: "Viszeral-Prüfung"};
+    const box = document.createElement("div");
+    box.className = "card fortsetzen";
+    const t = document.createElement("span");
+    t.className = "fzText";
+    const datum = new Date(st.t).toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"});
+    t.textContent = NAME[s] + " " + datum + " · " + bewertet + "/" + liste.length;
+    const knoepfe = document.createElement("div");
+    knoepfe.className = "fzKnoepfe";
+    const ja = document.createElement("button");
+    ja.className = "primary"; ja.textContent = "Fortsetzen";
+    ja.onclick = () => { waehle(s === "hirnnerven" ? "cranio" : s); saeule = s; render(liste, true, st.m, st.sc); };
+    const nein = document.createElement("button");
+    nein.textContent = "Verwerfen";
+    nein.onclick = () => { laufLoeschen(s); box.remove(); };
+    knoepfe.append(ja, nein);
+    box.append(t, knoepfe);
+    const anker = ziel[unter[s]] || byId(unter[s]);
+    if (!anker) return;
+    anker.after(box);
+    ziel[unter[s]] = box;
+  });
 }
 
 let suchwort = "";
@@ -3616,7 +3677,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-10-26.16";
+const APP_VERSION = "2026-10-26.19";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
