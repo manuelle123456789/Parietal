@@ -1,2 +1,2 @@
 # Parietal
-Lernapp Parietale Prüfung
+Lernapp BAO-Prüfung
