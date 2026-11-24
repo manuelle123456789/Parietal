@@ -185,6 +185,9 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 .fortsetzen .fzKnoepfe{display:flex;gap:6px;flex:none}
 .fortsetzen .fzKnoepfe button{min-height:34px;padding:4px 10px;font-size:.85rem;width:auto}
 .stack > .fortsetzen{flex-wrap:wrap;row-gap:6px}.fortsetzen .fzText{flex:1 1 100%}
+.sbTreffer{border-left-color:var(--amber)}
+.sbTreffer .sbLink{display:block;width:100%;text-align:left;margin-top:8px;padding:10px 12px;min-height:44px;font-size:.95rem}
+.sbTreffer .sbArt{display:block;font-size:.75rem;color:var(--muted);margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -3153,7 +3156,7 @@ function card(q, i, examMode){
     const offen = !ans.classList.toggle("hidden");
     btn.textContent = offen ? "Antwort verbergen" : "Antwort zeigen";
   };
-  if (mode === "suche" && suchwort){
+  if (mode === "suche" && suchwort.length){
     markiere(frage, suchwort);
     ans.querySelectorAll("span").forEach(s => markiere(s, suchwort));
   }
@@ -3507,31 +3510,56 @@ function fortsetzenKarte(){
   });
 }
 
-let suchwort = "";
+let suchwort = [];
 function norm(t){ return String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss"); }
-function markiere(el, wort){
+function markiere(el, woerter){
+  if (!Array.isArray(woerter)) woerter = [woerter];
   const t = el.textContent;
   const s = Array.from(t).map(c => norm(c).charAt(0) || c).join("");
-  if (s.indexOf(wort) < 0 || s.length !== t.length) return;
+  if (s.length !== t.length) return;
+  const istBuchstabe = c => /[a-z0-9]/.test(c || "");
+  const bereiche = [];
+  woerter.forEach(wort => {
+    if (!wort) return;
+    const ganz = wort.length <= 3;
+    let k = s.indexOf(wort);
+    while (k >= 0){
+      if (!(ganz && (istBuchstabe(s[k-1]) || istBuchstabe(s[k + wort.length])))) bereiche.push([k, k + wort.length]);
+      k = s.indexOf(wort, k + 1);
+    }
+  });
+  if (!bereiche.length) return;
+  bereiche.sort((x, y) => x[0] - y[0] || y[1] - x[1]);
+  const zus = [];
+  bereiche.forEach(r => { const l = zus[zus.length - 1]; if (l && r[0] <= l[1]) l[1] = Math.max(l[1], r[1]); else zus.push(r.slice()); });
   el.textContent = "";
   let pos = 0;
-  const istBuchstabe = c => /[a-z0-9]/.test(c || "");
-  const ganz = wort.length <= 3;
-  const naechster = ab => {
-    let k = s.indexOf(wort, ab);
-    while (ganz && k >= 0 && (istBuchstabe(s[k-1]) || istBuchstabe(s[k + wort.length]))) k = s.indexOf(wort, k + 1);
-    return k;
-  };
-  let j = naechster(pos);
-  while (j >= 0){
-    el.appendChild(document.createTextNode(t.slice(pos, j)));
+  zus.forEach(([von, bis]) => {
+    el.appendChild(document.createTextNode(t.slice(pos, von)));
     const m = document.createElement("mark");
-    m.textContent = t.slice(j, j + wort.length);
+    m.textContent = t.slice(von, bis);
     el.appendChild(m);
-    pos = j + wort.length;
-    j = naechster(pos);
-  }
+    pos = bis;
+  });
   el.appendChild(document.createTextNode(t.slice(pos)));
+}
+// Suchbegriffe zerlegen: einzelne Wörter, "genaue Wortfolge" in Anführungszeichen
+function suchbegriffe(roh){
+  const teile = [];
+  const rx = /[\u201E\u201C\u201D"]([^\u201E\u201C\u201D"]+)[\u201E\u201C\u201D"]|(\S+)/g;
+  let m;
+  while ((m = rx.exec(roh))){
+    const w = norm((m[1] || m[2] || "").trim());
+    if (w && !teile.includes(w)) teile.push(w);
+  }
+  return teile;
+}
+function passt(text, w){
+  if (w.length <= 3){
+    const rx = new RegExp("(^|[^a-z0-9])" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![a-z0-9])");
+    return rx.test(text);
+  }
+  return text.includes(w);
 }
 function platzhalter(){
   return saeule === "cranio" || saeule === "hirnnerven" ? "z. B. Vagus, Sphenoid, CV4" : "z. B. Piriformis, MET, Torsionsachsen";
@@ -3552,10 +3580,99 @@ function suchleiste(wert){
   return box;
 }
 
+// Abkürzungen und Synonyme: jedes Wort einer Gruppe findet auch die anderen
+const SYNONYME = [
+  ["schmerz","sz"],["kopfschmerz","kopf-sz"],["dysfunktion","df"],["hirnnerv","hn"],
+  ["lendenwirbelsaule","lws"],["brustwirbelsaule","bws"],["halswirbelsaule","hws"],
+  ["iliosakralgelenk","isg"],["sphenobasilar","ssb"],["spannungsmembran","rsm"],
+  ["rhythmischer impuls","cri","prm"],["liquor","lcs"],["thoraxapertur","ota"],
+  ["kiefergelenk","tmg"],["huftgelenk","hg"],["kniegelenk","kg"],
+  ["temporale","schlafenbein"],["occipitale","hinterhauptsbein"],["sphenoidale","keilbein"],
+  ["ethmoidale","siebbein"],["frontale","stirnbein"],["parietale","scheitelbein"],
+  ["maxilla","maxillare","oberkiefer"],["mandibula","unterkiefer"],["zygomaticum","zygoma","jochbein"],
+  ["vomer","pflugscharbein"],["palatinum","gaumenbein"],["nasale","nasenbein"],["lacrimale","tranenbein"],
+  ["nervus","n."],["musculus","m."],["ligamentum","lig."],["ganglion","ggl."],["sutura","sut."],
+  ["processus","proc."],["foramen","f."],
+  ["aussenrotation","ar","aro"],["innenrotation","ir","iro"],
+  ["wirbelkorper","wk"],["wirbelsaule","ws"],["halswirbelkorper","hwk"],["brustwirbelkorper","bwk"],["lendenwirbelkorper","lwk"],
+  ["seitneigung","sn","lateralflexion","latflex"],["sakroiliakalgelenk","sig"],["angulus inferior lateralis","ail"],
+  ["muskelenergietechnik","met"],["high velocity","hvla"],["oberes sprunggelenk","osg"],["unteres sprunggelenk","usg"],
+  ["spina iliaca anterior superior","sias"],["spina iliaca posterior superior","sips"],["spina iliaca anterior inferior","siai"],
+  ["vorderes kreuzband","vkb"],["hinteres kreuzband","hkb"],["collaterale laterale","lcl"],["collaterale mediale","lcm"],
+  ["longitudinale posterius","llp"],["longitudinale anterius","lla"],
+  ["acromioclaviculargelenk","akromioklavikulargelenk","acg"],["sternoclaviculargelenk","sternoklavikulargelenk","scg"],
+  ["thoracic outlet","thoracic-outlet","tos"],["centrum-collum","ccd"],["differentialdiagnose","dd"],
+  ["obere extremitat","oex"],["untere extremitat","uex"],["abduktion","abd"],["adduktion","add"],
+  ["extension","ext"],["flexion","flex"],["sidebending","sbr"]
+];
+// Liefert alle Schreibweisen zu einem Suchwort: [{t, ganz}]
+function varianten(w){
+  const liste = [{t: w, ganz: w.length <= 3}];
+  SYNONYME.forEach(g => {
+    const trifft = g.some(m => m === w || (w.length >= 5 && m.length >= 5 && (w.startsWith(m) || m.startsWith(w))));
+    if (trifft) g.forEach(m => { if (m !== w && !liste.some(v => v.t === m)) liste.push({t: m, ganz: m.length <= 4}); });
+  });
+  return liste;
+}
+function passtV(text, vs){
+  return vs.some(v => v.ganz
+    ? new RegExp("(^|[^a-z0-9])" + v.t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![a-z0-9])").test(text)
+    : text.includes(v.t));
+}
+// Steckbriefe durchsuchen (Hirnnerven + Knochen), Treffer je Abschnitt
+function steckbriefTreffer(gruppen){
+  const erg = [];
+  [["steckbriefe","Hirnnerven"],["knochenSB","Knochen"]].forEach(([id, art]) => {
+    document.querySelectorAll("#" + id + " details").forEach(d => {
+      const titel = d.querySelector("summary").textContent.trim();
+      const abschnitte = [{name: null, h: null, text: ""}];
+      [...d.children].forEach(el => {
+        if (el.tagName === "SUMMARY") return;
+        if (el.tagName === "H3") abschnitte.push({name: el.textContent.trim(), h: el, text: ""});
+        else abschnitte[abschnitte.length - 1].text += " " + el.textContent;
+      });
+      const hier = [];
+      abschnitte.forEach(a => {
+        const t = norm(titel + " " + (a.name || "") + " " + a.text);
+        if (gruppen.every(vs => passtV(t, vs))) hier.push({id, art, titel, abschnitt: a.name, h: a.h, d});
+      });
+      // Viele Abschnitte eines Steckbriefs → ein Eintrag für den ganzen Steckbrief
+      if (hier.length >= 4) erg.push({id, art, titel, abschnitt: "ganzer Steckbrief (" + hier.length + " Abschnitte)", h: null, d});
+      else erg.push(...hier);
+    });
+  });
+  return erg;
+}
+let sbAusSuche = null;
+function sbMarkenWeg(){
+  document.querySelectorAll("#steckbriefe mark, #knochenSB mark").forEach(m => {
+    const p = m.parentNode; p.replaceChild(document.createTextNode(m.textContent), m); p.normalize();
+  });
+}
+function oeffneSteckbriefTreffer(t, woerter, roh){
+  sbMarkenWeg();
+  sbAusSuche = roh;
+  byId("exam").classList.add("hide");
+  byId("home").classList.add("hide");
+  byId(t.id).classList.remove("hide");
+  byId("titel").textContent = t.id === "steckbriefe" ? "Hirnnerven-Steckbriefe" : "Knochen-Steckbriefe";
+  document.querySelectorAll("#" + t.id + " details").forEach(x => { x.open = (x === t.d); });
+  t.d.querySelectorAll("summary, h3, p").forEach(el => markiere(el, woerter));
+  const ziel = t.h || t.d;
+  setTimeout(() => { const y = ziel.getBoundingClientRect().top + window.scrollY - 70; window.scrollTo(0, Math.max(0, y)); }, 30);
+}
+function zurueckAusSteckbrief(){
+  sbMarkenWeg();
+  byId("steckbriefe").classList.add("hide");
+  byId("knochenSB").classList.add("hide");
+  const q = sbAusSuche; sbAusSuche = null;
+  waehle("cranio");
+  if (q) suchen(q);
+}
+
 function suchen(eingabe){
   const roh = (eingabe !== undefined ? eingabe : byId("suche").value).trim();
   byId("suche").value = roh;
-  const w = norm(roh);
   const imErgebnis = !byId("exam").classList.contains("hide") && mode === "suche";
   const melde = text => {
     if (imErgebnis){
@@ -3565,21 +3682,42 @@ function suchen(eingabe){
       byId("sucheInfo").textContent = text;
     }
   };
-  if (w.length < 2){ melde("Bitte mindestens 2 Buchstaben eingeben."); return; }
+  const woerter = suchbegriffe(roh).filter(x => x.length >= 2);
+  if (!woerter.length){ melde("Bitte mindestens 2 Buchstaben eingeben."); return; }
   const reihe = SLOTS[saeule].concat(saeule === "cranio" ? ["Hirnnerven"] : []);
-  const kurz = w.length <= 3;
-  const rx = new RegExp("(^|[^a-z0-9])" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![a-z0-9])");
   const quelle = saeule === "cranio" ? DATA.filter(q => q.saeule === "cranio" || q.saeule === "hirnnerven") : alle();
-  const treffer = quelle.filter(q => { const t = norm(q.frage + " " + (q.antwort || "")); return kurz ? rx.test(t) : t.includes(w); })
-    .sort((a,b) => reihe.indexOf(a.slot) - reihe.indexOf(b.slot) || a.nr - b.nr);
-  if (!treffer.length){ melde("Keine Treffer für \u201E" + roh + "\u201C."); return; }
+  const gruppen = woerter.map(varianten);
+  const alleVarianten = [].concat(...gruppen.map(g => g.map(v => v.t)));
+  const inFrage = q => { const f = norm(q.frage); return gruppen.filter(vs => passtV(f, vs)).length; };
+  const treffer = quelle.filter(q => { const t = norm(q.frage + " " + (q.antwort || "")); return gruppen.every(vs => passtV(t, vs)); })
+    .sort((a,b) => inFrage(b) - inFrage(a) || reihe.indexOf(a.slot) - reihe.indexOf(b.slot) || a.nr - b.nr);
+  const sbT = (saeule === "cranio" || saeule === "hirnnerven") ? steckbriefTreffer(gruppen) : [];
+  if (!treffer.length && !sbT.length){ melde("Keine Treffer für „" + roh + "“" + (woerter.length > 1 ? " (alle Begriffe zusammen)." : ".")); return; }
   byId("sucheInfo").textContent = "";
-  suchwort = w;
+  suchwort = alleVarianten;
   render(treffer, false, "suche");
-  suchwort = "";
+  suchwort = [];
   const kopf = document.createElement("p");
   kopf.className = "treffer";
-  kopf.textContent = treffer.length + " Treffer für \u201E" + roh + "\u201C";
+  kopf.textContent = treffer.length + " Treffer für „" + roh + "“" + (sbT.length ? " · " + sbT.length + " in Steckbriefen" : "");
+  if (sbT.length){
+    const box = document.createElement("div");
+    box.className = "card sbTreffer";
+    const h = document.createElement("p");
+    h.className = "q";
+    h.textContent = "Steckbriefe (" + sbT.length + ")";
+    box.appendChild(h);
+    sbT.forEach(t => {
+      const b = document.createElement("button");
+      b.className = "sbLink";
+      const art = document.createElement("span"); art.className = "sbArt"; art.textContent = t.art;
+      b.append(art, document.createTextNode(t.titel + (t.abschnitt ? " › " + t.abschnitt : "")));
+      b.onclick = () => oeffneSteckbriefTreffer(t, alleVarianten, roh);
+      box.appendChild(b);
+    });
+    const stack = byId("exam").querySelector(".stack");
+    stack.after(box);
+  }
   const leiste = suchleiste(roh);
   byId("exam").prepend(leiste, kopf);
 }
@@ -3607,13 +3745,15 @@ byId("startHN").onclick = () => { saeule = "hirnnerven"; render(buildExam(), tru
   if (d.open) document.querySelectorAll(sel + " details").forEach(x => { if (x !== d) x.open = false; });
 })));
 byId("oeffneKB").onclick = () => {
+  sbMarkenWeg(); sbAusSuche = null;
   byId("home").classList.add("hide");
   byId("knochenSB").classList.remove("hide");
   byId("titel").textContent = "Knochen-Steckbriefe";
   window.scrollTo(0,0);
 };
-byId("kbZurueck").onclick = () => waehle("cranio");
+byId("kbZurueck").onclick = zurueckAusSteckbrief;
 byId("oeffneSB").onclick = () => {
+  sbMarkenWeg(); sbAusSuche = null;
   byId("home").classList.add("hide");
   byId("steckbriefe").classList.remove("hide");
   byId("titel").textContent = "Hirnnerven-Steckbriefe";
@@ -3626,7 +3766,7 @@ byId("waehleSteckbriefe").onclick = () => {
   byId("titel").textContent = "Hirnnerven-Steckbriefe";
   window.scrollTo(0,0);
 };
-byId("sbZurueck").onclick = () => waehle("cranio");
+byId("sbZurueck").onclick = zurueckAusSteckbrief;
 byId("waehleHirnnerven").onclick = () => waehle("hirnnerven");
 byId("zurueckStart").onclick = startseite;
 byId("zurueck").onclick = startseite;
@@ -3678,7 +3818,7 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-11-19.2";
+const APP_VERSION = "2026-11-24.3";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
