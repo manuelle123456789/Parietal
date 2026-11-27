@@ -185,9 +185,82 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 .fortsetzen .fzKnoepfe{display:flex;gap:6px;flex:none}
 .fortsetzen .fzKnoepfe button{min-height:34px;padding:4px 10px;font-size:.85rem;width:auto}
 .stack > .fortsetzen{flex-wrap:wrap;row-gap:6px}.fortsetzen .fzText{flex:1 1 100%}
-.sbTreffer{border-left-color:var(--amber)}
+.sbTreffer{border-left-color:var(--amber);margin-top:14px}
 .sbTreffer .sbLink{display:block;width:100%;text-align:left;margin-top:8px;padding:10px 12px;min-height:44px;font-size:.95rem}
 .sbTreffer .sbArt{display:block;font-size:.75rem;color:var(--muted);margin-bottom:2px}
+
+/* ===== Weihnachtsedition (automatisch 26.11.–10.01.) ===== */
+.xmas{--teal:#1F6B45;--teal-soft:#E1EFE6;--amber:#B3261E;--flag:#B3261E}
+@media (prefers-color-scheme: dark){:root.xmas:not([data-theme="light"]){--teal:#6CC08E;--teal-soft:#1B2E24;--amber:#E5736A}}
+:root.xmas[data-theme="dark"]{--teal:#6CC08E;--teal-soft:#1B2E24;--amber:#E5736A}
+.xmas body{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2090%2090%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23B9CCDA%22%20stroke-width%3D%221%22%20opacity%3D%22.45%22%3E%3Cpath%20d%3D%22M20%2012%20v16%20M12%2020%20h16%20M14.5%2014.5%20l11%2011%20M25.5%2014.5%20l-11%2011%22/%3E%3Cpath%20d%3D%22M66%2058%20v12%20M60%2064%20h12%20M61.8%2059.8%20l8.4%208.4%20M70.2%2059.8%20l-8.4%208.4%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2270%22%20cy%3D%2218%22%20r%3D%221.4%22%20fill%3D%22%23B9CCDA%22%20opacity%3D%22.5%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2270%22%20r%3D%221.2%22%20fill%3D%22%23B9CCDA%22%20opacity%3D%22.5%22/%3E%3C/svg%3E");background-size:90px 90px}
+.xmas header{position:relative;border-bottom:3px solid #B3261E;margin-bottom:34px;padding-top:22px}
+.xmas header::after{content:"";position:absolute;left:0;right:0;bottom:-38px;height:36px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%2040%22%3E%3Cpath%20d%3D%22M0%203%20Q40%2022%2080%203%20Q120%2022%20160%203%22%20fill%3D%22none%22%20stroke%3D%22%231E5B37%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M0%203%20Q40%2022%2080%203%20Q120%2022%20160%203%22%20fill%3D%22none%22%20stroke%3D%22%232E7D4F%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%222%204%22/%3E%3Cline%20x1%3D%2240%22%20y1%3D%2212%22%20x2%3D%2240%22%20y2%3D%2218%22%20stroke%3D%22%239AA5AD%22/%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%2226%22%20r%3D%229%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%2237%22%20cy%3D%2223%22%20r%3D%222.5%22%20fill%3D%22%23fff%22%20opacity%3D%22.6%22/%3E%3Cline%20x1%3D%22120%22%20y1%3D%2212%22%20x2%3D%22120%22%20y2%3D%2216%22%20stroke%3D%22%239AA5AD%22/%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%2223%22%20r%3D%227.5%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23C62828%22%20stroke-width%3D%221.5%22/%3E%3Ccircle%20cx%3D%22117.5%22%20cy%3D%2220.5%22%20r%3D%222%22%20fill%3D%22%23C62828%22%20opacity%3D%22.3%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%229.5%22%20r%3D%223%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%229.5%22%20r%3D%223%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%232E7D4F%22/%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%229.5%22%20r%3D%223%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%229.5%22%20r%3D%223%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%232E7D4F%22/%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%224%22%20r%3D%224%22%20fill%3D%22%232E7D4F%22/%3E%3C/svg%3E") repeat-x;background-size:160px 40px;pointer-events:none;z-index:2}
+.xmas h1{position:relative}
+.xmas h1::before{content:"";position:absolute;left:-4px;top:-20px;width:40px;height:33px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2052%22%3E%3Cpath%20d%3D%22M8%2040%20C14%2022%2026%206%2044%208%20C54%209%2060%2018%2058%2030%20C52%2022%2044%2020%2036%2024%20C30%2028%2024%2034%2022%2040%20Z%22%20fill%3D%22%23C62828%22/%3E%3Crect%20x%3D%222%22%20y%3D%2236%22%20width%3D%2234%22%20height%3D%2212%22%20rx%3D%226%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23DADADA%22/%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%226.5%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23DADADA%22/%3E%3C/svg%3E") no-repeat center/contain;transform:rotate(-10deg);pointer-events:none}
+.xmas .card{position:relative}
+.xmas .card::before{content:"";position:absolute;left:-3px;right:-3px;top:-7px;height:19px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%2020%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%208%20Q4%203%2010%205%20Q16%200%2024%204%20Q31%201%2038%205%20Q46%200%2055%204%20Q62%202%2068%205%20Q76%200%2085%204%20Q92%201%2099%205%20Q107%200%20114%204%20Q118%203%20120%206%20V11%20Q115%2018%20108%2012%20Q101%2019%2092%2012%20Q85%2016%2077%2011%20Q68%2019%2059%2012%20Q50%2017%2042%2011%20Q33%2019%2024%2012%20Q16%2017%209%2011%20Q4%2015%200%2012%20Z%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23BFD2E0%22%20stroke-width%3D%22.8%22%20vector-effect%3D%22non-scaling-stroke%22%2F%3E%3C%2Fsvg%3E") no-repeat;background-size:100% 100%;pointer-events:none;z-index:1;filter:drop-shadow(0 1px 1px rgba(60,90,110,.18))}
+@media (prefers-color-scheme: dark){:root.xmas:not([data-theme="light"]) .card::before{opacity:.85}}
+.xmas #start .card.big{padding-right:84px;overflow:visible;min-height:64px}
+.xmas #start .card.big::after{content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:58px;height:70px;background:no-repeat center/contain;pointer-events:none}
+.xmas #start #waehleParietal.card.big::after{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2052%22%3E%3Cpolygon%20points%3D%2220%2C1%2022.6%2C6.6%2028.6%2C6.8%2023.9%2C10.5%2025.6%2C16.3%2020%2C12.9%2014.4%2C16.3%2016.1%2C10.5%2011.4%2C6.8%2017.4%2C6.6%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23C62828%22%20stroke-width%3D%221%22/%3E%3Cpolygon%20points%3D%2220%2C12%2033%2C28%207%2C28%22%20fill%3D%22%232E7D4F%22/%3E%3Cpolygon%20points%3D%2220%2C18%2036%2C36%204%2C36%22%20fill%3D%22%23256B42%22/%3E%3Cpolygon%20points%3D%2220%2C25%2039%2C45%201%2C45%22%20fill%3D%22%231E5B37%22/%3E%3Crect%20x%3D%2217%22%20y%3D%2245%22%20width%3D%226%22%20height%3D%226%22%20fill%3D%22%237A4E2D%22/%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2232%22%20r%3D%222.2%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%2226%22%20cy%3D%2226%22%20r%3D%222%22%20fill%3D%22%23FFFFFF%22/%3E%3Ccircle%20cx%3D%2227%22%20cy%3D%2240%22%20r%3D%222.3%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2241%22%20r%3D%222%22%20fill%3D%22%23FFFFFF%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2234%22%20r%3D%221.8%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E")}
+.xmas #start #waehleCranio.card.big::after{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2030%2056%22%3E%3Cpath%20d%3D%22M12%2052%20L12%2018%20C12%208%2026%208%2026%2018%22%20fill%3D%22none%22%20stroke%3D%22%23C62828%22%20stroke-width%3D%228.5%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M12%2052%20L12%2018%20C12%208%2026%208%2026%2018%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M12%2052%20L12%2018%20C12%208%2026%208%2026%2018%22%20fill%3D%22none%22%20stroke%3D%22%23C62828%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22butt%22%20stroke-dasharray%3D%224%204%22/%3E%3C/svg%3E");transform:translateY(-50%) rotate(12deg)}
+.xmas #start #waehleViszeral.card.big::after{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2030%2040%22%3E%3Cline%20x1%3D%2215%22%20y1%3D%220%22%20x2%3D%2215%22%20y2%3D%228%22%20stroke%3D%22%239AA5AD%22%20stroke-width%3D%221%22/%3E%3Crect%20x%3D%2211.5%22%20y%3D%227%22%20width%3D%227%22%20height%3D%225%22%20rx%3D%221%22%20fill%3D%22%23B0BEC5%22/%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%2224%22%20r%3D%2212%22%20fill%3D%22%23C62828%22%20/%3E%3Cpath%20d%3D%22M4%2022%20Q15%2028%2026%2022%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222%22%20opacity%3D%22.8%22/%3E%3Ccircle%20cx%3D%2211%22%20cy%3D%2220%22%20r%3D%223%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%22.55%22/%3E%3C/svg%3E")}
+.xmas #start #waehlePatho.card.big::after{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2030%2040%22%3E%3Cline%20x1%3D%2215%22%20y1%3D%220%22%20x2%3D%2215%22%20y2%3D%228%22%20stroke%3D%22%239AA5AD%22%20stroke-width%3D%221%22/%3E%3Crect%20x%3D%2211.5%22%20y%3D%227%22%20width%3D%227%22%20height%3D%225%22%20rx%3D%221%22%20fill%3D%22%23B0BEC5%22/%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%2224%22%20r%3D%2212%22%20fill%3D%22%232E7D4F%22%20/%3E%3Cpath%20d%3D%22M4%2022%20Q15%2028%2026%2022%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222%22%20opacity%3D%22.8%22/%3E%3Ccircle%20cx%3D%2211%22%20cy%3D%2220%22%20r%3D%223%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%22.55%22/%3E%3C/svg%3E")}
+.xmas #start .stack > .card:nth-child(odd){border-left:4px solid #B3261E}
+.xmas #start .stack > .card:nth-child(even){border-left:4px solid #1F6B45}
+.xmas #start::after{content:"";display:block;height:80px;margin-top:22px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20220%2080%22%3E%3Cg%20fill%3D%22%231E5B37%22%3E%3Cpolygon%20points%3D%2220%2C20%2038%2C70%202%2C70%22/%3E%3Cpolygon%20points%3D%2220%2C10%2032%2C40%208%2C40%22/%3E%3C/g%3E%3Cg%20fill%3D%22%232E7D4F%22%3E%3Cpolygon%20points%3D%2270%2C30%2086%2C72%2054%2C72%22/%3E%3Cpolygon%20points%3D%2270%2C22%2080%2C48%2060%2C48%22/%3E%3C/g%3E%3Cg%20fill%3D%22%23256B42%22%3E%3Cpolygon%20points%3D%22125%2C8%20148%2C72%20102%2C72%22/%3E%3Cpolygon%20points%3D%22125%2C0%20141%2C36%20109%2C36%22/%3E%3C/g%3E%3Cg%20fill%3D%22%232E7D4F%22%3E%3Cpolygon%20points%3D%22185%2C28%20201%2C72%20169%2C72%22/%3E%3Cpolygon%20points%3D%22185%2C20%20196%2C46%20174%2C46%22/%3E%3C/g%3E%3Ccircle%20cx%3D%22125%22%20cy%3D%222%22%20r%3D%223%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%22118%22%20cy%3D%2240%22%20r%3D%222.5%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%22133%22%20cy%3D%2255%22%20r%3D%222.5%22%20fill%3D%22%23FFFFFF%22/%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2250%22%20r%3D%222%22%20fill%3D%22%23C62828%22/%3E%3Ccircle%20cx%3D%2274%22%20cy%3D%2258%22%20r%3D%222%22%20fill%3D%22%23FFFFFF%22/%3E%3Ccircle%20cx%3D%22182%22%20cy%3D%2256%22%20r%3D%222%22%20fill%3D%22%23C62828%22/%3E%3Cpath%20d%3D%22M0%2072%20Q55%2064%20110%2072%20T220%2072%20L220%2080%20L0%2080%20Z%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E") repeat-x bottom center;background-size:220px 80px}
+.xmas .primary{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 10px,transparent 10px 20px)}
+#schnee{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden;display:none}
+.xmas #schnee{display:block}
+#schnee i{position:absolute;top:-30px;color:#A9C1D3;font-style:normal;user-select:none;animation:schneefall linear infinite;opacity:.7;text-shadow:0 0 2px rgba(255,255,255,.9)}
+@media (prefers-color-scheme: dark){#schnee i{color:#E6EEF3}}
+@keyframes schneefall{0%{transform:translate(0,-30px) rotate(0deg)}50%{transform:translate(22px,50vh) rotate(180deg)}100%{transform:translate(-8px,108vh) rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){#schnee{display:none !important}}
+.xmasSchalter{display:flex;align-items:center;justify-content:center;gap:6px;width:auto;align-self:center;margin:18px auto 0;padding:6px 14px;min-height:34px;font-size:.8rem;font-weight:600;background:#FFFFFF;border:1.5px solid #B3261E;color:#B3261E;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.xmas #start:not(.hide){display:flex;flex-direction:column}
+.xmas #start::after{order:1;align-self:stretch}
+.xmas #start .xmasSchalter{order:2}
+.xmasSchalter.ein{border-color:#1F6B45;color:#1F6B45}
+.xmasSchalter::before{content:"\2744";font-size:.95rem}
+/* Weihnachten 2: Adventskalender, Lichterkette, Feier, Symbole, Schlitten */
+.adventKarte{display:none}
+.xmas .adventKarte{display:block;margin-bottom:14px;border-left:4px solid #1F6B45}
+.adventKopf{display:flex;align-items:center;gap:14px;cursor:pointer}
+.adventKal{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:14px}
+.adventKal button{aspect-ratio:1;min-height:0;min-width:0;width:100%;padding:0;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;box-shadow:none;border:2px solid transparent}
+.adventKal .auf{background:#1F6B45;color:#fff;border-color:#1F6B45}
+.adventKal .verpasst{background:#fff;color:#B3261E;border-color:#B3261E}
+.adventKal .heute{background:#B3261E;color:#fff;border-color:#B3261E;box-shadow:0 0 0 2px #fff,0 0 0 4px #B3261E}
+.adventKal .heute.auf{background:#1F6B45;border-color:#1F6B45;box-shadow:0 0 0 2px #fff,0 0 0 4px #1F6B45}
+.adventKal .zu{background:#EEF2F4;color:#9AA7B0;border-color:#EEF2F4;cursor:default;opacity:1}
+.adventInfo{font-size:.78rem;color:var(--muted);margin:12px 0 0}
+.adventKarte.vorab{cursor:default}
+.adventTuer{flex:0 0 auto;width:54px;height:54px;border-radius:10px;background:#B3261E;color:#fff;font-weight:700;font-size:1.45rem;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.75);box-shadow:inset 0 0 0 3px #B3261E}
+.adventKarte.vorab .adventTuer{background:#1F6B45;box-shadow:inset 0 0 0 3px #1F6B45;font-size:1.1rem}
+.adventKarte .q{margin:0 0 2px}
+.adventKarte .note{margin:0}
+#lichter{display:none}
+.xmas #lichter{display:block}
+.lichterkette{position:fixed;top:0;bottom:0;width:18px;z-index:39;pointer-events:none;display:flex;flex-direction:column;justify-content:space-around;align-items:center}
+.lichterkette.links{left:2px}
+.lichterkette.rechts{right:2px}
+.lichterkette::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#1F6B45;opacity:.55}
+.lichterkette b{position:relative;width:9px;height:13px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;animation:lampe 1.6s ease-in-out infinite}
+.lichterkette b::before{content:"";position:absolute;top:-3px;left:2px;width:5px;height:4px;border-radius:1px;background:#1F6B45}
+.lichterkette b.r{background:#E53935;box-shadow:0 0 8px 2px rgba(229,57,53,.65)}
+.lichterkette b.g{background:#2FA35F;box-shadow:0 0 8px 2px rgba(47,163,95,.6)}
+.lichterkette b.w{background:#FFFFFF;border:1px solid #cfd8dc;box-shadow:0 0 8px 2px rgba(255,255,255,.95)}
+.lichterkette b:nth-child(2n){animation-delay:.8s}
+@keyframes lampe{0%,100%{opacity:1}50%{opacity:.3;box-shadow:none}}
+.xmas .meta .slot::before{content:"\2605";color:#B3261E;margin-right:5px}
+.xmas .antwortBtn::before{content:"";display:inline-block;width:17px;height:17px;margin-right:7px;vertical-align:-3px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Crect%20x%3D%222%22%20y%3D%228%22%20width%3D%2216%22%20height%3D%2210%22%20rx%3D%221.5%22%20fill%3D%22%23B3261E%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%225%22%20width%3D%2218%22%20height%3D%224%22%20rx%3D%221.2%22%20fill%3D%22%23C83A31%22%2F%3E%3Crect%20x%3D%228.6%22%20y%3D%225%22%20width%3D%222.8%22%20height%3D%2213%22%20fill%3D%22%23FFFFFF%22%2F%3E%3Cpath%20d%3D%22M10%205C7%201%203.5%202.5%205.5%205M10%205c3-4%206.5-2.5%204.5%200%22%20fill%3D%22none%22%20stroke%3D%22%231F6B45%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E") no-repeat center/contain}
+#schlitten{position:fixed;top:4px;left:0;width:150px;height:44px;z-index:41;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20170%2050%22%3E%0A%3Cg%20fill%3D%22%231F6B45%22%3E%3Cpath%20d%3D%22M118%2030c0-5%204-9%2010-9h14c4%200%206-3%208-6l3-4c1-1%203%200%202%202l-2%205%204-1c2%200%202%202%201%203l-6%204v4c0%203-2%205-5%205h-4l2%209h-3l-3-8h-9l-3%208h-3l2-9c-4-1-6-3-6-3z%22%2F%3E%0A%3Cpath%20d%3D%22M150%2011l-3-7M150%2011l2-8M150%2011l5-6M147%206l-4-2M152%205l3-3%22%20stroke%3D%22%231F6B45%22%20stroke-width%3D%221.6%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%0A%3Ccircle%20cx%3D%22160%22%20cy%3D%2221%22%20r%3D%222.6%22%20fill%3D%22%23E53935%22%2F%3E%0A%3Cpath%20d%3D%22M122%2027L92%2027%22%20stroke%3D%22%238a9a8f%22%20stroke-width%3D%221%22%2F%3E%0A%3Cpath%20d%3D%22M18%2022h62c4%200%206%203%205%207l-3%209H26c-6%200-9-4-8-9z%22%20fill%3D%22%23B3261E%22%2F%3E%0A%3Cpath%20d%3D%22M18%2022h62%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3Cpath%20d%3D%22M14%2044h66c5%200%208-2%209-6%22%20fill%3D%22none%22%20stroke%3D%22%231F6B45%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3Cpath%20d%3D%22M30%2038v6M70%2038v6%22%20stroke%3D%22%231F6B45%22%20stroke-width%3D%222%22%2F%3E%0A%3Crect%20x%3D%2240%22%20y%3D%229%22%20width%3D%2214%22%20height%3D%2213%22%20rx%3D%221.5%22%20fill%3D%22%231F6B45%22%2F%3E%3Crect%20x%3D%2245.8%22%20y%3D%229%22%20width%3D%222.4%22%20height%3D%2213%22%20fill%3D%22%23fff%22%2F%3E%0A%3Crect%20x%3D%2256%22%20y%3D%2213%22%20width%3D%2211%22%20height%3D%229%22%20rx%3D%221.5%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%23B3261E%22%20stroke-width%3D%221%22%2F%3E%3Crect%20x%3D%2260.6%22%20y%3D%2213%22%20width%3D%221.8%22%20height%3D%229%22%20fill%3D%22%23B3261E%22%2F%3E%0A%3C%2Fsvg%3E") no-repeat center/contain;display:none}
+#schlitten.fliegt{display:block;animation:schlitten 5s linear forwards}
+@keyframes schlitten{0%{transform:translate(-170px,26px) rotate(3deg)}50%{transform:translate(calc(50vw - 75px),0) rotate(-2deg)}100%{transform:translate(calc(100vw + 20px),22px) rotate(4deg)}}
+.konfetti{position:fixed;top:-24px;z-index:60;pointer-events:none;font-style:normal;animation:konfetti linear forwards}
+@keyframes konfetti{to{transform:translate(var(--dx),108vh) rotate(var(--rot))}}
+@media (prefers-reduced-motion: reduce){.lichterkette b{animation:none}#schlitten{display:none !important}.konfetti{display:none}}
 </style>
 </head>
 <body>
@@ -2771,6 +2844,7 @@ mark{background:var(--teal-soft);color:inherit;padding:0 2px;border-radius:2px}
 </section>
 
 <section id="home" class="hide">
+  <div class="card adventKarte" id="adventKarte"></div>
   <div class="stack">
     <div>
       <div class="suchleiste">
@@ -3148,6 +3222,7 @@ function card(q, i, examMode){
   frage.className = "q";
   frage.textContent = q.frage;
   const btn = document.createElement("button");
+  btn.className = "antwortBtn";
   btn.textContent = "Antwort zeigen";
   const ans = document.createElement("div");
   ans.className = "a hidden";
@@ -3285,6 +3360,8 @@ function evaluate(){
   box.appendChild(row);
   host.appendChild(box);
   window.scrollTo(0,0);
+  const endNote = mode === "exam" ? note : mode === "eigen" ? noteEigen : 9;
+  if (endNote <= 2 && typeof xmasFeier === "function") xmasFeier();
 }
 
 function save(punkte, note, maxP){
@@ -3340,6 +3417,7 @@ function home(){
   byId("cranioWahl").classList.add("hide");
   byId("home").classList.remove("hide");
   history(); zeigeFortschritt();
+  if (typeof adventZeigen === "function") adventZeigen();
   window.scrollTo(0,0);
 }
 
@@ -3818,8 +3896,157 @@ document.addEventListener("touchend", e => {
 startseite();
 
 // ---- Update-Prüfung: holt beim Öffnen und beim Zurückholen der App die aktuelle Version ----
-const APP_VERSION = "2026-11-24.3";
+const APP_VERSION = "2026-11-26.13";
 byId("versionInfo").textContent = "Stand " + APP_VERSION.slice(8,10) + "." + APP_VERSION.slice(5,7) + "." + APP_VERSION.slice(0,4) + " (" + APP_VERSION.split(".")[1] + ")";
+
+// ===== Weihnachtsedition: läuft automatisch vom 26.11. bis 10.01., danach altes Design =====
+(function(){
+  const d = new Date(), m = d.getMonth(), t = d.getDate();
+  const saison = (m === 10 && t >= 26) || m === 11 || (m === 0 && t <= 10);
+  let aus = false; try { aus = localStorage.getItem("bao_xmas_aus") === "1"; } catch(e) {}
+  const root = document.documentElement;
+  function schnee(){
+    let s = document.getElementById("schnee");
+    if (s) return;
+    s = document.createElement("div"); s.id = "schnee"; s.setAttribute("aria-hidden", "true");
+    const zeichen = ["\u2744", "\u2745", "\u2746", "\u2022"];
+    for (let i = 0; i < 28; i++){
+      const f = document.createElement("i");
+      f.textContent = zeichen[i % zeichen.length];
+      f.style.left = (Math.random() * 100) + "%";
+      f.style.fontSize = (10 + Math.random() * 14) + "px";
+      f.style.animationDuration = (9 + Math.random() * 10) + "s";
+      f.style.animationDelay = (-Math.random() * 18) + "s";
+      s.appendChild(f);
+    }
+    document.body.appendChild(s);
+  }
+  function anwenden(){
+    root.classList.toggle("xmas", saison && !aus);
+    if (saison && !aus) schnee();
+    document.querySelectorAll(".xmasSchalter").forEach(k => {
+      k.textContent = aus ? "Weihnachtslook einschalten" : "Weihnachtslook ausschalten";
+      k.classList.toggle("ein", aus);
+    });
+  }
+  if (saison){
+    ["start", "home"].forEach(id => {
+      const sec = document.getElementById(id);
+      if (!sec) return;
+      const k = document.createElement("button");
+      k.className = "xmasSchalter";
+      k.onclick = () => { aus = !aus; try { localStorage.setItem("bao_xmas_aus", aus ? "1" : "0"); } catch(e) {} anwenden(); };
+      sec.appendChild(k);
+    });
+  }
+  anwenden();
+})();
+// ===== Weihnachten 2: Adventskalender, Lichterkette, Feier, Schlitten (nur mit Klasse "xmas") =====
+function xmasAn(){ return document.documentElement.classList.contains("xmas"); }
+function wenigBewegung(){ return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
+function xmasFeier(){
+  if (!xmasAn() || wenigBewegung()) return;
+  const farben = ["#B3261E", "#1F6B45", "#FFFFFF", "#E53935", "#2FA35F"];
+  const zeichen = ["★", "✦", "■", "●", "❄"];
+  for (let i = 0; i < 70; i++){
+    const k = document.createElement("i");
+    k.className = "konfetti";
+    k.textContent = zeichen[i % zeichen.length];
+    k.style.left = (Math.random() * 100) + "vw";
+    k.style.color = farben[i % farben.length];
+    k.style.fontSize = (12 + Math.random() * 14) + "px";
+    k.style.textShadow = "0 0 1px rgba(0,0,0,.35)";
+    k.style.setProperty("--dx", ((Math.random() - .5) * 160) + "px");
+    k.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+    k.style.animationDuration = (2.6 + Math.random() * 2.2) + "s";
+    k.style.animationDelay = (Math.random() * .8) + "s";
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 6000);
+  }
+}
+(function(){
+  // Lichterkette links und rechts
+  const l = document.createElement("div"); l.id = "lichter"; l.setAttribute("aria-hidden", "true");
+  ["links", "rechts"].forEach((seite, si) => {
+    const kette = document.createElement("div");
+    kette.className = "lichterkette " + seite;
+    const art = ["r", "g", "w"];
+    for (let i = 0; i < 14; i++){ const b = document.createElement("b"); b.className = art[(i + si) % 3]; kette.appendChild(b); }
+    l.appendChild(kette);
+  });
+  document.body.appendChild(l);
+
+  // Schlitten: etwa alle 2 Minuten
+  const sch = document.createElement("div"); sch.id = "schlitten"; sch.setAttribute("aria-hidden", "true");
+  document.body.appendChild(sch);
+  function flug(){
+    if (!xmasAn() || wenigBewegung() || document.hidden) return;
+    sch.classList.remove("fliegt"); void sch.offsetWidth; sch.classList.add("fliegt");
+  }
+  sch.addEventListener("animationend", () => sch.classList.remove("fliegt"));
+  setTimeout(flug, 8000);
+  setInterval(flug, 420000);
+
+})();
+// Adventskalender: Türchen in der jeweiligen Säule, Tagesfrage aus dieser Säule
+function adventZeigen(){
+  const karte = document.getElementById("adventKarte");
+  if (!karte) return;
+  karte.innerHTML = ""; karte.style.display = "none"; karte.onclick = null;
+  const d = new Date(), m = d.getMonth(), t = d.getDate(), jahr = d.getFullYear();
+  const sk = saeule === "hirnnerven" ? "cranio" : saeule;
+  const SA = {
+    parietal: {name: "Parietal", topf: q => q.saeule === "parietal"},
+    cranio: {name: "Cranio", topf: q => q.saeule === "cranio" || q.saeule === "hirnnerven"},
+    viszeral: {name: "Viszeral", topf: q => q.saeule === "viszeral"}
+  }[sk];
+  if (!SA) return;
+  if (!(m === 11 && t <= 24)) return;
+  const topf = DATA.filter(q => SA.topf(q) && !q.offen).sort((a, b) => a.id < b.id ? -1 : 1);
+  if (!topf.length) return;
+  function frageVom(tag){
+    let h = 2166136261;
+    const key = jahr + "-12-" + tag + "-" + sk;
+    for (let i = 0; i < key.length; i++){ h ^= key.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    return topf[h % topf.length];
+  }
+  const speicher = "bao_advent_" + jahr + "_" + sk;
+  let offen = [];
+  try { offen = JSON.parse(localStorage.getItem(speicher) || "[]"); } catch(e) {}
+  function oeffne(tag){
+    if (!offen.includes(tag)){ offen.push(tag); try { localStorage.setItem(speicher, JSON.stringify(offen)); } catch(e) {} }
+    const q = frageVom(tag);
+    saeule = q.saeule; render([q], false, "drill");
+  }
+  const heuteAuf = offen.includes(t);
+  const kopf = document.createElement("div");
+  kopf.className = "adventKopf";
+  kopf.innerHTML = '<div class="adventTuer">' + t + '</div><div><p class="q">Türchen ' + t + (heuteAuf ? ' nochmal ansehen' : ' öffnen') + '</p><p class="note">Deine Tagesfrage aus ' + SA.name + '</p></div>';
+  kopf.onclick = () => oeffne(t);
+  const kal = document.createElement("div");
+  kal.className = "adventKal";
+  let geoeffnet = 0, verpasst = 0;
+  for (let tag = 1; tag <= 24; tag++){
+    const f = document.createElement("button");
+    f.textContent = tag;
+    if (tag > t){ f.className = "zu"; f.disabled = true; }
+    else {
+      const auf = offen.includes(tag);
+      if (auf) geoeffnet++; else if (tag < t) verpasst++;
+      f.className = tag === t ? "heute" + (auf ? " auf" : "") : (auf ? "auf" : "verpasst");
+      f.setAttribute("aria-label", "Türchen " + tag + (auf ? " (geöffnet)" : ""));
+      f.onclick = () => oeffne(tag);
+    }
+    kal.appendChild(f);
+  }
+  const info = document.createElement("p");
+  info.className = "adventInfo";
+  info.textContent = geoeffnet + " von " + t + " Türchen geöffnet" + (verpasst ? " · rot umrandete kannst du nachholen" : "");
+  karte.append(kopf, kal, info);
+  karte.style.display = "";
+}
+(function(){
+})();
 let neueVersion = null, letzteUpdatePruefung = 0;
 function aufNeueVersionWechseln(){
   try { sessionStorage.setItem("bao_update_versuch", neueVersion); } catch(e) {}
